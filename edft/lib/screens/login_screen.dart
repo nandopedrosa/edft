@@ -1,10 +1,11 @@
 // ignore_for_file: avoid_print
 import 'package:edft/localization/localization_service.dart';
+import 'package:edft/screens/forgot_password_screen.dart';
+import 'package:edft/screens/home_screen.dart';
 import 'package:edft/screens/signup_screen.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:flutter/material.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,10 +16,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
-
   final _passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+  }
+
+  login(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      //TODO: logar no firebase
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
           appBar: AppBar(
             title: const Text("Login"),
             titleTextStyle: appBarTitle,
+            automaticallyImplyLeading: false,
           ),
           body: Stack(
             fit: StackFit.expand,
@@ -56,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextFormField(
                                 controller: _usernameController,
                                 keyboardType: TextInputType.emailAddress,
-                                //TODO: validate
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return LocalizationService.instance
@@ -67,8 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 decoration: InputDecoration(
                                     hintText: LocalizationService.instance
                                         .getLocalizedString("enter_email"),
-                                    labelText: LocalizationService.instance
-                                        .getLocalizedString("username")),
+                                    labelText: "Email"),
                               ),
                               const SizedBox(
                                 height: 20,
@@ -94,12 +111,40 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(
                                 height: 20,
                               ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ForgotPasswordScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Text(
+                                        LocalizationService.instance
+                                            .getLocalizedString(
+                                                "forgot_password"),
+                                        style: const TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               const SizedBox(
-                                height: 24,
+                                height: 12,
                               ),
                               InkWell(
                                 onTap: () {
-                                  print("Logou!");
+                                  login(context);
                                 },
                                 child: Container(
                                   width: double.infinity,
