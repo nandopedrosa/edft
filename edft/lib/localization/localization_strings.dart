@@ -44,5 +44,30 @@ class LocalizationStrings {
     'go_to_login': ["Ir para o login", "Go to login"],
     'edit': ["Editar", "Edit"],
     'my_trips': ["Minhas viagens", "My trips"],
+    'itinerary': ["Roteiro", "Itinerary"],
+    'details': ["Detalhes", "Details"],
+    'profile': ["Perfil", "Profile"],
+    'update': ["Atualizar", "Update"],
+    'personal_profile': ["Perfil pessoal", "Personal profile"],
+    'travel_profile': ["Perfil de viagem", "Travel profile"],
+    'personal_profile_disclaimer': [
+      "Usamos essas informações apenas para melhorar a sua experiência de viagens",
+      "We use this information only to make your travel experience better."
+    ],
+    'year_of_birth': ["Ano de nascimento", "Year of birth"],
+    'enter_year_of_birth': [
+      "Digite o seu ano de nascimento",
+      "Enter your year of birth"
+    ],
+    'invalid_year_of_birth': [
+      "Ano de nascimento inválido",
+      "Invalid year of birth"
+    ],
+    'country': ["País", "Country"],
+    'relationship_status': ["Status de relacionamento", "Relationship status"],
+    'gender': ["Gênero", "Gender"],
+    'male': ["Masculino", "Male"],
+    'female': ["Feminino", "Female"],
+    'other': ["Outro", "Other"],
   };
 }

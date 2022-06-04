@@ -26,6 +26,7 @@ class PasswordResetSuccessScreenState
         appBar: AppBar(
           titleTextStyle: appBarTitle,
           automaticallyImplyLeading: false,
+          centerTitle: true,
           title: Text(
             LocalizationService.instance.getLocalizedString("success"),
           ),

@@ -1,22 +1,25 @@
 // ignore_for_file: avoid_print
 
 import 'dart:typed_data';
-import 'package:edft/screens/signup_success_screen.dart';
+import 'package:edft/screens/personal_profile.dart';
+import 'package:edft/screens/travel_profile.dart';
+import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
+import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../localization/localization_service.dart';
 import '../utils/functions.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignupScreen> createState() => SignupScreenState();
+  State<ProfileScreen> createState() => ProfileScreenState();
 }
 
-class SignupScreenState extends State<SignupScreen> {
+class ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -31,18 +34,6 @@ class SignupScreenState extends State<SignupScreen> {
     _passwordController.dispose();
   }
 
-  signup(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      //TODO: criar conta no Firebase
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SignupSuccessScreen(),
-        ),
-      );
-    }
-  }
-
   selectImage() async {
     Uint8List im = await pickImage(ImageSource.gallery);
     setState(() {
@@ -53,11 +44,13 @@ class SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar:
+          const MyBottomNavigationBar(currentPage: profilePageIndex),
       appBar: AppBar(
         titleTextStyle: appBarTitle,
         centerTitle: true,
         title: Text(
-          LocalizationService.instance.getLocalizedString("new_account"),
+          LocalizationService.instance.getLocalizedString("profile"),
         ),
       ),
       body: Padding(
@@ -157,17 +150,74 @@ class SignupScreenState extends State<SignupScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PersonalProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          LocalizationService.instance
+                              .getLocalizedString("personal_profile"),
+                          style: Theme.of(context).textTheme.subtitle1!,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Icon(Icons.arrow_forward_ios),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TravelProfileScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          LocalizationService.instance
+                              .getLocalizedString("travel_profile"),
+                          style: Theme.of(context).textTheme.subtitle1!,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(Icons.arrow_forward_ios),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
                 Container(
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
                     child: Text(LocalizationService.instance
-                        .getLocalizedString("create_account")),
+                        .getLocalizedString("update")),
                     onPressed: () {
-                      signup(context);
+                      //TODO: update profile
                     },
                   ),
                 ),
+                const SizedBox(height: 30),
               ],
             ),
           )),

@@ -34,6 +34,7 @@ class PasswordResetScreenState extends State<PasswordResetScreen> {
     return Scaffold(
       appBar: AppBar(
         titleTextStyle: appBarTitle,
+        centerTitle: true,
         title: Text(
           LocalizationService.instance.getLocalizedString("password_reset"),
         ),

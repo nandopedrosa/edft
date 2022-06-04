@@ -1,20 +1,22 @@
 // ignore_for_file: avoid_print
 
 import 'package:edft/screens/password_reset_screen.dart';
+import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
+import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
 
 import '../localization/localization_service.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+class TravelProfileScreen extends StatefulWidget {
+  const TravelProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPasswordScreen> createState() => ForgotPasswordScreenState();
+  State<TravelProfileScreen> createState() => TravelProfileScreenState();
 }
 
-class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class TravelProfileScreenState extends State<TravelProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -27,6 +29,8 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar:
+          const MyBottomNavigationBar(currentPage: profilePageIndex),
       appBar: AppBar(
         centerTitle: true,
         titleTextStyle: appBarTitle,
