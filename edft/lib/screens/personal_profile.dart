@@ -1,11 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:edft/utils/globals.dart';
+import 'package:edft/utils/models.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
-
 import '../localization/localization_service.dart';
 
 class PersonalProfileScreen extends StatefulWidget {
@@ -18,23 +19,19 @@ class PersonalProfileScreen extends StatefulWidget {
 class PersonalProfileScreenState extends State<PersonalProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _yearOfBirthController = TextEditingController();
-  String _selectedGender = "";
-  final List<DropdownMenuItem<String>> _genders = [
-    DropdownMenuItem(
-        value: "M",
-        child: Text(LocalizationService.instance.getLocalizedString("male"))),
-    DropdownMenuItem(
-        value: "F",
-        child: Text(LocalizationService.instance.getLocalizedString("female"))),
-    DropdownMenuItem(
-        value: "O",
-        child: Text(LocalizationService.instance.getLocalizedString("other")))
-  ];
+  String? _selectedGender;
+  String? _selectedRelationshipStatus;
+  Country? _selectedCountry;
 
   @override
   void dispose() {
     super.dispose();
     _yearOfBirthController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -62,7 +59,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     LocalizationService.instance
-                        .getLocalizedString("personal_profile_disclaimer"),
+                        .getLocalizedString("profile_disclaimer"),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -70,6 +67,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   padding: const EdgeInsets.all(10),
                   child: TextFormFieldInput(
                     controller: _yearOfBirthController,
+                    inputSize: 4,
                     isPass: false,
                     hintText: LocalizationService.instance
                         .getLocalizedString("enter_year_of_birth"),
@@ -94,15 +92,67 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    decoration: getDropdownDecoration(context),
-                    hint: Text(LocalizationService.instance
-                        .getLocalizedString("gender")),
-                    onChanged: (value) {
+                    value: _selectedGender,
+                    decoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance.getLocalizedString("gender"),
+                    ),
+                    onChanged: (String? value) {
                       setState(() {
-                        _selectedGender = value as String;
+                        _selectedGender = value;
                       });
                     },
-                    items: _genders,
+                    items: genderList,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownButtonFormField(
+                    value: _selectedRelationshipStatus,
+                    decoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance
+                          .getLocalizedString("relationship_status"),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedRelationshipStatus = value;
+                      });
+                    },
+                    items: relationshipStatusList,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownSearch<Country>(
+                    popupProps: PopupProps.menu(
+                      isFilterOnline: false,
+                      showSelectedItems: false,
+                      showSearchBox: true,
+                      searchFieldProps: TextFieldProps(
+                        decoration: InputDecoration(
+                            label: Text(LocalizationService.instance
+                                .getLocalizedString("search_ellipsis"))),
+                      ),
+                    ),
+                    dropdownSearchDecoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance
+                          .getLocalizedString("country"),
+                    ),
+                    itemAsString: (Country c) => c.toString(),
+                    showClearButton: true,
+                    onChanged: (Country? data) {
+                      setState(() {
+                        _selectedCountry = data;
+                      });
+                    },
+                    selectedItem: _selectedCountry,
+                    items:
+                        LocalizationService.instance.getPreferredLanguage() ==
+                                'pt'
+                            ? countriesBr
+                            : countriesEn,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -111,7 +161,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
                     child: Text(LocalizationService.instance
-                        .getLocalizedString("continue")),
+                        .getLocalizedString("update")),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         print(_selectedGender);

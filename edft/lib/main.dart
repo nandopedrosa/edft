@@ -20,10 +20,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
-        cardColor: cardColor,
         appBarTheme: const AppBarTheme(
           foregroundColor: Colors.white,
-          backgroundColor: backgroundColor, 
+          backgroundColor: backgroundColor,
         ),
         textTheme:
             GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme).apply(

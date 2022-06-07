@@ -5,6 +5,7 @@ class TextFormFieldInput extends StatelessWidget {
   final bool isPass;
   final String hintText;
   final String labelText;
+  final int inputSize;
   final TextInputType textInputType;
   final String? Function(String?) validator;
   const TextFormFieldInput(
@@ -13,6 +14,7 @@ class TextFormFieldInput extends StatelessWidget {
       this.isPass = false,
       required this.hintText,
       required this.labelText,
+      this.inputSize = 128,
       required this.textInputType,
       required this.validator})
       : super(key: key);
@@ -26,6 +28,7 @@ class TextFormFieldInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+      maxLength: inputSize,
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,

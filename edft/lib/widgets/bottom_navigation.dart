@@ -24,15 +24,6 @@ class MyBottomNavigationBar extends StatelessWidget {
           backgroundColor: backgroundColor,
         ),
         BottomNavigationBarItem(
-            icon: Icon(
-              Icons.place,
-              color: (currentPage == placesPageIndex)
-                  ? primaryColor
-                  : secondaryColor,
-            ),
-            label: '',
-            backgroundColor: primaryColor),
-        BottomNavigationBarItem(
           icon: Icon(
             Icons.person,
             color: (currentPage == profilePageIndex)
@@ -45,9 +36,8 @@ class MyBottomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(
             Icons.settings,
-            color: (currentPage == settingsPageIndex)
-                ? primaryColor
-                : secondaryColor,
+            color:
+                (currentPage == aboutPageIndex) ? primaryColor : secondaryColor,
           ),
           label: '',
           backgroundColor: primaryColor,

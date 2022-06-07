@@ -1,11 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'package:edft/screens/password_reset_screen.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/globals.dart';
+import 'package:edft/utils/models.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
-import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../localization/localization_service.dart';
 
@@ -17,13 +18,20 @@ class TravelProfileScreen extends StatefulWidget {
 }
 
 class TravelProfileScreenState extends State<TravelProfileScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  String? _selectedAccomodationPreference;
+  String? _selectedTransportPreference;
+  String? _selectedAttractionsPreferences;
+  String? _selectedBudgetPreference;
+  final _attractions = attractionPreferencesList
+      .map((attraction) =>
+          MultiSelectItem<Attraction>(attraction, attraction.name))
+      .toList();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
   }
 
   @override
@@ -35,7 +43,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
         centerTitle: true,
         titleTextStyle: appBarTitle,
         title: Text(
-          LocalizationService.instance.getLocalizedString("forgot_password"),
+          LocalizationService.instance.getLocalizedString("travel_profile"),
         ),
       ),
       body: Padding(
@@ -50,29 +58,110 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    LocalizationService.instance.getLocalizedString("alright"),
+                    LocalizationService.instance
+                        .getLocalizedString("profile_disclaimer"),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    controller: _emailController,
-                    isPass: false,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_email"),
-                    labelText: LocalizationService.instance
-                        .getLocalizedString("email"),
-                    textInputType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
+                  child: DropdownButtonFormField(
+                    value: _selectedAccomodationPreference,
+                    decoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance
+                          .getLocalizedString("accomodation_preference"),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedAccomodationPreference = value;
+                      });
                     },
+                    items: accomodationPreferenceList,
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownButtonFormField(
+                    value: _selectedTransportPreference,
+                    decoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance
+                          .getLocalizedString("transport_preference"),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedTransportPreference = value;
+                      });
+                    },
+                    items: transportPreferenceList,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: DropdownButtonFormField(
+                    value: _selectedBudgetPreference,
+                    decoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance
+                          .getLocalizedString("budget_preference"),
+                    ),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedBudgetPreference = value;
+                      });
+                    },
+                    items: budgetPreferenceList,
+                  ),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    child: MultiSelectDialogField(
+                      selectedItemsTextStyle:
+                          const TextStyle(color: Colors.blue),
+                      itemsTextStyle: const TextStyle(color: Colors.white),
+                      unselectedColor: Colors.white,
+                      title: Text(
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                          LocalizationService.instance
+                              .getLocalizedString("attractions_preferences")),
+                      confirmText: const Text(
+                        "OK",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      cancelText: Text(
+                        LocalizationService.instance
+                            .getLocalizedString("cancel")
+                            .toUpperCase(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: fillColor, width: 2),
+                        color: fillColor,
+                      ),
+                      buttonIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.white70,
+                      ),
+                      buttonText: Text(
+                        LocalizationService.instance
+                            .getLocalizedString("attractions_preferences"),
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 16,
+                        ),
+                      ),
+                      items: _attractions,
+                      onConfirm: (List<Attraction> attractions) {
+                        String a = getAttractionsAsString(attractions);
+                        setState(() {
+                          _selectedAttractionsPreferences = a;
+                        });
+                      },
+                    )),
                 const SizedBox(
                   height: 20,
                 ),
@@ -81,18 +170,12 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
                     child: Text(LocalizationService.instance
-                        .getLocalizedString("continue")),
+                        .getLocalizedString("update")),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //TODO: resetar senha do usuário no Firebase, enviar código por email
-                        print("informou email para resetar senha!");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PasswordResetScreen(),
-                          ),
-                        );
-                      }
+                      print(_selectedAccomodationPreference);
+                      print(_selectedAttractionsPreferences);
+                      print(_selectedBudgetPreference);
+                      print(_selectedTransportPreference);
                     },
                   ),
                 ),
@@ -100,5 +183,16 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
             ),
           )),
     );
+  }
+
+  String getAttractionsAsString(List<Attraction> attractions) {
+    String result = "";
+    for (Attraction a in attractions) {
+      result += "${a.code},";
+    }
+    if (result.isNotEmpty) {
+      result = result.substring(0, result.length - 1);
+    }
+    return result;
   }
 }

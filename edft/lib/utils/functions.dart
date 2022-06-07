@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:edft/screens/home_screen.dart';
-import 'package:edft/screens/places_screen.dart';
 import 'package:edft/screens/profile_screen.dart';
-import 'package:edft/screens/settings_screen.dart';
+import 'package:edft/screens/about_screen.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,21 +35,15 @@ Widget pickPage(int page) {
       }
       break;
 
-    case placesPageIndex:
-      {
-        w = const PlacesScreen();
-      }
-      break;
-
     case profilePageIndex:
       {
         w = const ProfileScreen();
       }
       break;
 
-    case settingsPageIndex:
+    case aboutPageIndex:
       {
-        w = const SettingsScreen();
+        w = const AboutScreen();
       }
       break;
 

@@ -10,23 +10,34 @@ class TripCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const ListTile(
-            leading: Icon(
-              Icons.card_travel,
-              color: cardLeadingIconColor,
-            ),
-            title: Text('Brasil, Recife'),
-            subtitle: Text(
-              '01/01/2022 a 10/01/2022',
-              style: TextStyle(
-                color: secondaryColor,
-                fontSize: 12,
+          const Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.card_travel,
+                color: cardLeadingIconColor,
+              ),
+              title: Text('Brasil, Recife'),
+              subtitle: Text(
+                'Viagem com a família',
+                style: TextStyle(
+                  color: secondaryColor,
+                  fontSize: 12,
+                ),
+              ),
+              trailing: Text(
+                '01/01/2022 a 10/01/2022',
+                style: TextStyle(
+                  color: secondaryColor,
+                  fontSize: 12,
+                ),
               ),
             ),
           ),

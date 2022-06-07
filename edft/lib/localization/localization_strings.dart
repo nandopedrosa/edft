@@ -3,6 +3,7 @@ class LocalizationStrings {
     'dont_have_account': ["Não tem uma conta?", "Don't have an account?"],
     'login': ["Login", "Login"],
     'signup': ["Inscreva-se", "Signup"],
+    'cancel': ["Cancelar", "Cancel"],
     'username': ["Nome de usuário", "Username"],
     'password': ["Senha", "Password"],
     'enter_password': ["Digite a senha", "Enter password"],
@@ -32,6 +33,7 @@ class LocalizationStrings {
       "A senha e a sua confirmação devem ser iguais",
       "Password and Password Confirmation must match"
     ],
+    'confirm': ["Confirmar", "Confirm"],
     'success': ["Sucesso", "Success"],
     'password_reset_success': [
       "Sua senha foi redefinida com sucesso! Agora você já pode fazer o login. Boas viagens!",
@@ -50,7 +52,7 @@ class LocalizationStrings {
     'update': ["Atualizar", "Update"],
     'personal_profile': ["Perfil pessoal", "Personal profile"],
     'travel_profile': ["Perfil de viagem", "Travel profile"],
-    'personal_profile_disclaimer': [
+    'profile_disclaimer': [
       "Usamos essas informações apenas para melhorar a sua experiência de viagens",
       "We use this information only to make your travel experience better."
     ],
@@ -64,10 +66,74 @@ class LocalizationStrings {
       "Invalid year of birth"
     ],
     'country': ["País", "Country"],
+    'choose_country': ["Escolha o país", "Choose country"],
     'relationship_status': ["Status de relacionamento", "Relationship status"],
     'gender': ["Gênero", "Gender"],
+    'choose_gender': ["Escolha o gênero", "Choose gender"],
     'male': ["Masculino", "Male"],
     'female': ["Feminino", "Female"],
     'other': ["Outro", "Other"],
+    'search_ellipsis': ["Buscar...", "Search..."],
+    'single': ["Solteiro", "Single"],
+    'in_a_relationship': ["Em um relacionamento", "In a relationship"],
+    'accomodation_preference': [
+      "Preferência de acomodação",
+      "Accomodation preference"
+    ],
+    'accomodation': ["Acomodação", "Accomodation"],
+    'hostel': ["Albergue", "Hostel"],
+    'transport_preference': [
+      "Preferência de transporte",
+      "Transport preference"
+    ],
+    'transport': ["Transporte", "Transporte"],
+    'car': ["Carro", "Car"],
+    'bus': ["Ônibus", "Bus"],
+    'train': ["Trem", "Train"],
+    'budget_preference': ["Preferência de orçamento", "Budget preference"],
+    'economic': ["Econômico", "Economic"],
+    'executive': ["Executivo", "Executive"],
+    'attractions_preferences': [
+      "Preferências de atrações",
+      "Attractions preferences"
+    ],
+    'bar': ["Bar", "Bar"],
+    'museum': ["Museu", "Museum"],
+    'nature': ["Natureza", "Nature"],
+    'travel_details': ["Detalhes da viagem", "Travel details"],
+    'travel_name': ["Nome da viagem", "Travel name"],
+    'enter_travel_name': [
+      "Dê um nome à sua viagem",
+      "Enter an identification for your travel"
+    ],
+    'arrival': ["Chegada", "Arrival"],
+    'departure': ["Saída", "Departure"],
+    'number_of_travelers': ["Número de viajantes", "Number of travelers"],
+    'enter_number_of_travelers': [
+      "Digite o número de viajantes",
+      "Enter number of travelers"
+    ],
+    'city': ["Cidade", "City"],
+    'travel_details_updated': [
+      "Detalhes da viagem atualizados.",
+      "Travel details updated."
+    ],
+    'dont_forget_to_add_places': [
+      "Não esqueça de adicionar locais ao seu roteiro!",
+      "Don't forget to add places to your itinerary!"
+    ],
+    'places': ["Locais", "Places"],
+    'see_places': ["Ver locais", "See places"],
+    'see_itinerary': ["Ver roteiro", "See itinerary"],
+    'about': ["Sobre", "About"],
+    'app_title': ["Esse Dia Foi Trip", "Esse Dia Foi Trip"],
+    'about_app': [
+      "Esse Dia Foi Trip é um aplicativo que organiza de forma inteligente os seus roteiros de viagens baseado em suas preferências e no seu perfil.",
+      "Esse Dia Foi Trip organizes your travel itinerary based on your personal preferences and profile."
+    ],
+    'questions_suggestions_contact': [
+      "Em caso de dúvidas ou sugestões, você pode entrar em contato conosco em:",
+      "If you have any questions or suggestions, you may contact us at:"
+    ],
   };
 }

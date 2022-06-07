@@ -43,130 +43,166 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar:
-          const MyBottomNavigationBar(currentPage: profilePageIndex),
-      appBar: AppBar(
-        titleTextStyle: appBarTitle,
-        centerTitle: true,
-        title: Text(
-          LocalizationService.instance.getLocalizedString("profile"),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        bottomNavigationBar:
+            const MyBottomNavigationBar(currentPage: profilePageIndex),
+        appBar: AppBar(
+          titleTextStyle: appBarTitle,
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: Text(
+            LocalizationService.instance.getLocalizedString("profile"),
+          ),
         ),
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: _image == null
-                      ? const CircleAvatar(
-                          radius: 128,
-                          backgroundImage:
-                              AssetImage('assets/images/l60Hf.png'),
-                          backgroundColor: Colors.grey,
-                        )
-                      : CircleAvatar(
-                          radius: 128,
-                          backgroundImage: MemoryImage(_image!),
-                          backgroundColor: Colors.grey,
+        body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: _image == null
+                        ? const CircleAvatar(
+                            radius: 128,
+                            backgroundImage:
+                                AssetImage('assets/images/l60Hf.png'),
+                            backgroundColor: Colors.grey,
+                          )
+                        : CircleAvatar(
+                            radius: 128,
+                            backgroundImage: MemoryImage(_image!),
+                            backgroundColor: Colors.grey,
+                          ),
+                  ),
+                  GestureDetector(
+                    onTap: selectImage,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        LocalizationService.instance.getLocalizedString("edit"),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.blue,
                         ),
-                ),
-                GestureDetector(
-                  onTap: selectImage,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      LocalizationService.instance.getLocalizedString("edit"),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.blue,
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    controller: _nameController,
-                    isPass: false,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_name"),
-                    labelText:
-                        LocalizationService.instance.getLocalizedString("name"),
-                    textInputType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormFieldInput(
+                      controller: _nameController,
+                      isPass: false,
+                      hintText: LocalizationService.instance
+                          .getLocalizedString("enter_name"),
+                      labelText: LocalizationService.instance
+                          .getLocalizedString("name"),
+                      textInputType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    controller: _emailController,
-                    isPass: false,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_email"),
-                    labelText: LocalizationService.instance
-                        .getLocalizedString("email"),
-                    textInputType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormFieldInput(
+                      controller: _emailController,
+                      isPass: false,
+                      hintText: LocalizationService.instance
+                          .getLocalizedString("enter_email"),
+                      labelText: LocalizationService.instance
+                          .getLocalizedString("email"),
+                      textInputType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    controller: _passwordController,
-                    isPass: true,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_password"),
-                    labelText: LocalizationService.instance
-                        .getLocalizedString("password"),
-                    textInputType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormFieldInput(
+                      controller: _passwordController,
+                      isPass: true,
+                      hintText: LocalizationService.instance
+                          .getLocalizedString("enter_password"),
+                      labelText: LocalizationService.instance
+                          .getLocalizedString("password"),
+                      textInputType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PersonalProfileScreen(),
-                        ),
-                      );
-                    },
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PersonalProfileScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            LocalizationService.instance
+                                .getLocalizedString("personal_profile"),
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_forward_ios),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
                     child: Row(
                       children: [
-                        Text(
-                          LocalizationService.instance
-                              .getLocalizedString("personal_profile"),
-                          style: Theme.of(context).textTheme.subtitle1!,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const TravelProfileScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            LocalizationService.instance
+                                .getLocalizedString("travel_profile"),
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
@@ -175,52 +211,23 @@ class ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TravelProfileScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          LocalizationService.instance
-                              .getLocalizedString("travel_profile"),
-                          style: Theme.of(context).textTheme.subtitle1!,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(Icons.arrow_forward_ios),
-                    ],
+                  const SizedBox(height: 40),
+                  Container(
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: ElevatedButton(
+                      child: Text(LocalizationService.instance
+                          .getLocalizedString("update")),
+                      onPressed: () {
+                        //TODO: update profile
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 40),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("update")),
-                    onPressed: () {
-                      //TODO: update profile
-                    },
-                  ),
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          )),
+                  const SizedBox(height: 30),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

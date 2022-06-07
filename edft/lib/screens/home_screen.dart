@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+import 'package:edft/screens/travel_details.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -30,7 +31,14 @@ class HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                 iconSize: 32,
                 icon: const Icon(Icons.add),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TravelDetailsScreen(),
+                    ),
+                  );
+                },
               ),
             )
           ],
