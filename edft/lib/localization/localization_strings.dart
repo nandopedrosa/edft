@@ -97,6 +97,8 @@ class LocalizationStrings {
       "Preferências de atrações",
       "Attractions preferences"
     ],
+    'restaurant': ["Restaurante", "Restaurant"],
+    'attractions': ["Atrações", "Attractions"],
     'bar': ["Bar", "Bar"],
     'museum': ["Museu", "Museum"],
     'nature': ["Natureza", "Nature"],
@@ -123,7 +125,11 @@ class LocalizationStrings {
       "Don't forget to add places to your itinerary!"
     ],
     'places': ["Locais", "Places"],
-    'see_places': ["Ver locais", "See places"],
+    'see_add_places': ["Ver e adicionar locais", "See and add places"],
+    'see_add_attractions': [
+      "Ver e adicionar atrações",
+      "See and add attractions"
+    ],
     'see_itinerary': ["Ver roteiro", "See itinerary"],
     'about': ["Sobre", "About"],
     'app_title': ["Esse Dia Foi Trip", "Esse Dia Foi Trip"],

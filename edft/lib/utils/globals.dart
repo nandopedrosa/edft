@@ -1,7 +1,6 @@
 //Navigation
 import 'package:edft/utils/models.dart';
 import 'package:flutter/material.dart';
-
 import '../localization/localization_service.dart';
 
 const int homePageIndex = 0;
@@ -81,14 +80,22 @@ final List<Attraction> attractionPreferencesList = [
   Attraction(
     code: "bar",
     name: LocalizationService.instance.getLocalizedString("bar"),
+    image: "assets/images/attraction-bar.jpg",
+  ),
+  Attraction(
+    code: "restaurant",
+    name: LocalizationService.instance.getLocalizedString("restaurant"),
+    image: "assets/images/attraction-restaurant.jpg",
   ),
   Attraction(
     code: "museum",
     name: LocalizationService.instance.getLocalizedString("museum"),
+    image: "assets/images/attraction-museum.jpg",
   ),
   Attraction(
     code: "nature",
     name: LocalizationService.instance.getLocalizedString("nature"),
+    image: "assets/images/attraction-nature.jpg",
   ),
 ];
 
@@ -524,4 +531,66 @@ List<Country> countriesEn = [
   Country(code: "YE", name: "Yemen"),
   Country(code: "ZM", name: "Zambia"),
   Country(code: "ZW", name: "Zimbabwe"),
+];
+
+List<City> citiesPt = [
+  City(id: "1", countryCode: "BR", name: "Rio Branco"),
+  City(id: "2", countryCode: "BR", name: "Maceió"),
+  City(id: "3", countryCode: "BR", name: "Macapá"),
+  City(id: "4", countryCode: "BR", name: "Manaus"),
+  City(id: "5", countryCode: "BR", name: "Salvador"),
+  City(id: "6", countryCode: "BR", name: "Fortaleza"),
+  City(id: "7", countryCode: "BR", name: "Brasília"),
+  City(id: "8", countryCode: "BR", name: "Vitória"),
+  City(id: "9", countryCode: "BR", name: "Goiânia"),
+  City(id: "10", countryCode: "BR", name: "São Luís"),
+  City(id: "11", countryCode: "BR", name: "Cuiabá"),
+  City(id: "12", countryCode: "BR", name: "Campo Grande"),
+  City(id: "13", countryCode: "BR", name: "Belo Horizonte"),
+  City(id: "14", countryCode: "BR", name: "Belém"),
+  City(id: "15", countryCode: "BR", name: "João Pessoa"),
+  City(id: "16", countryCode: "BR", name: "Curitiba"),
+  City(id: "17", countryCode: "BR", name: "Recife"),
+  City(id: "18", countryCode: "BR", name: "Teresina"),
+  City(id: "19", countryCode: "BR", name: "Rio de Janeiro"),
+  City(id: "20", countryCode: "BR", name: "Natal"),
+  City(id: "21", countryCode: "BR", name: "Porto Alegre"),
+  City(id: "22", countryCode: "BR", name: "Porto Velho"),
+  City(id: "23", countryCode: "BR", name: "Boa Vista"),
+  City(id: "24", countryCode: "BR", name: "Florianópolis"),
+  City(id: "25", countryCode: "BR", name: "São Paulo"),
+  City(id: "26", countryCode: "BR", name: "Aracaju"),
+  City(id: "27", countryCode: "BR", name: "Palmas"),
+  City(id: "28", countryCode: "IT", name: "Roma"),
+];
+
+List<City> citiesEn = [
+  City(id: "1", countryCode: "BR", name: "Rio Branco"),
+  City(id: "2", countryCode: "BR", name: "Maceió"),
+  City(id: "3", countryCode: "BR", name: "Macapá"),
+  City(id: "4", countryCode: "BR", name: "Manaus"),
+  City(id: "5", countryCode: "BR", name: "Salvador"),
+  City(id: "6", countryCode: "BR", name: "Fortaleza"),
+  City(id: "7", countryCode: "BR", name: "Brasília"),
+  City(id: "8", countryCode: "BR", name: "Vitória"),
+  City(id: "9", countryCode: "BR", name: "Goiânia"),
+  City(id: "10", countryCode: "BR", name: "São Luís"),
+  City(id: "11", countryCode: "BR", name: "Cuiabá"),
+  City(id: "12", countryCode: "BR", name: "Campo Grande"),
+  City(id: "13", countryCode: "BR", name: "Belo Horizonte"),
+  City(id: "14", countryCode: "BR", name: "Belém"),
+  City(id: "15", countryCode: "BR", name: "João Pessoa"),
+  City(id: "16", countryCode: "BR", name: "Curitiba"),
+  City(id: "17", countryCode: "BR", name: "Recife"),
+  City(id: "18", countryCode: "BR", name: "Teresina"),
+  City(id: "19", countryCode: "BR", name: "Rio de Janeiro"),
+  City(id: "20", countryCode: "BR", name: "Natal"),
+  City(id: "21", countryCode: "BR", name: "Porto Alegre"),
+  City(id: "22", countryCode: "BR", name: "Porto Velho"),
+  City(id: "23", countryCode: "BR", name: "Boa Vista"),
+  City(id: "24", countryCode: "BR", name: "Florianópolis"),
+  City(id: "25", countryCode: "BR", name: "São Paulo"),
+  City(id: "26", countryCode: "BR", name: "Aracaju"),
+  City(id: "27", countryCode: "BR", name: "Palmas"),
+  City(id: "28", countryCode: "IT", name: "Rome"),
 ];

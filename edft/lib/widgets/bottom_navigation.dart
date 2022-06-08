@@ -44,16 +44,13 @@ class MyBottomNavigationBar extends StatelessWidget {
         ),
       ],
       onTap: (int page) {
-        //Change only if the user clicked on a different page
-        if (page != currentPage) {
-          Widget w = pickPage(page);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => w,
-            ),
-          );
-        }
+        Widget w = pickPage(page);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => w,
+          ),
+        );
       },
       currentIndex: currentPage,
     );
