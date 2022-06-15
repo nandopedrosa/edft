@@ -2,7 +2,7 @@
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:edft/screens/itinerary_screen.dart';
-import 'package:edft/screens/attractions_screen.dart';
+import 'package:edft/screens/attractions_menu_screen.dart';
 import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
@@ -96,6 +96,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
               children: <Widget>[
                 const SizedBox(
                   height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    LocalizationService.instance
+                        .getLocalizedString("travel_details_disclaimer"),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -294,6 +302,47 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                 const SizedBox(
                   height: 20,
                 ),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: ElevatedButton(
+                    child: Text(LocalizationService.instance
+                        .getLocalizedString("confirm")),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        //TODO: cadastrar viagem
+                        print(_arrivalDate);
+                        print(_departureDate);
+                        print(_selectedCity);
+
+                        if (_travelId == null || _travelId!.isEmpty) {
+                          //New travel
+                          showSnackBar(
+                            context,
+                            // ignore: prefer_interpolation_to_compose_strings
+                            LocalizationService.instance.getLocalizedString(
+                                    "travel_details_updated") +
+                                " " +
+                                LocalizationService.instance.getLocalizedString(
+                                    "dont_forget_to_add_places"),
+                            'success',
+                          );
+                        } else {
+                          //Existing travel
+                          showSnackBar(
+                            context,
+                            LocalizationService.instance
+                                .getLocalizedString("travel_details_updated"),
+                            'success',
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: GestureDetector(
@@ -301,7 +350,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AttractionsScreen(),
+                          builder: (context) => const AttractionsMenuScreen(),
                         ),
                       );
                     },
@@ -309,7 +358,36 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       children: [
                         Text(
                           LocalizationService.instance
-                              .getLocalizedString("see_add_attractions"),
+                              .getLocalizedString("add_attractions"),
+                          style: Theme.of(context).textTheme.subtitle1!,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Icon(Icons.arrow_forward_ios),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AttractionsMenuScreen(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          LocalizationService.instance
+                              .getLocalizedString("view_added_attractions"),
                           style: Theme.of(context).textTheme.subtitle1!,
                         ),
                         const SizedBox(
@@ -347,43 +425,6 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                         const Icon(Icons.arrow_forward_ios),
                       ],
                     ),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("confirm")),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //TODO: cadastrar viagem
-                        print(_arrivalDate);
-                        print(_departureDate);
-                        print(_selectedCity);
-
-                        if (_travelId == null || _travelId!.isEmpty) {
-                          //New travel
-                          showSnackBar(
-                            context,
-                            // ignore: prefer_interpolation_to_compose_strings
-                            LocalizationService.instance.getLocalizedString(
-                                    "travel_details_updated") +
-                                " " +
-                                LocalizationService.instance.getLocalizedString(
-                                    "dont_forget_to_add_places"),
-                          );
-                        } else {
-                          //Existing travel
-                          showSnackBar(
-                            context,
-                            LocalizationService.instance
-                                .getLocalizedString("travel_details_updated"),
-                          );
-                        }
-                      }
-                    },
                   ),
                 ),
                 const SizedBox(height: 40),

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:edft/screens/login_screen.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,17 @@ class SignupSuccessScreenState extends State<SignupSuccessScreen> {
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: <Widget>[
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: const Icon(
+                    Icons.check_circle_outline,
+                    color: successColor,
+                    size: 64,
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),

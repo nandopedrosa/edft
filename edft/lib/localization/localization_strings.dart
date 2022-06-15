@@ -1,5 +1,15 @@
+import 'package:edft/utils/globals.dart';
+
 class LocalizationStrings {
   static const localizedStrings = <String, List<String>>{
+    'lorem_ipsum': [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt."
+    ],
+    'lorem_ipsum_small': [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum."
+    ],
     'dont_have_account': ["Não tem uma conta?", "Don't have an account?"],
     'login': ["Login", "Login"],
     'signup': ["Inscreva-se", "Signup"],
@@ -126,10 +136,11 @@ class LocalizationStrings {
     ],
     'places': ["Locais", "Places"],
     'see_add_places': ["Ver e adicionar locais", "See and add places"],
-    'see_add_attractions': [
-      "Ver e adicionar atrações",
-      "See and add attractions"
+    'view_added_attractions': [
+      "Ver atrações adicionadas",
+      "View added attractions"
     ],
+    'add_attractions': ["Adicionar atrações", "Add attractions"],
     'see_itinerary': ["Ver roteiro", "See itinerary"],
     'about': ["Sobre", "About"],
     'app_title': ["Esse Dia Foi Trip", "Esse Dia Foi Trip"],
@@ -140,6 +151,35 @@ class LocalizationStrings {
     'questions_suggestions_contact': [
       "Em caso de dúvidas ou sugestões, você pode entrar em contato conosco em:",
       "If you have any questions or suggestions, you may contact us at:"
+    ],
+    'travel_details_disclaimer': [
+      "Muito bem, vamos preencher alguns detalhes sobre a sua viagem!",
+      "Alright, let's fill out some of your travel details!"
+    ],
+    'attraction': ["Atração", "Attraction"],
+    'add_to_trip': ["Adicionar à viagem", "Add to trip"],
+    'remove_from_trip': ["Remover da viagem", "Remove from trip"],
+    'add': ["Adicionar", "Remover"],
+    'remove': ["Remover", "Remove"],
+    'time': ["Horário", "Time"],
+    'activity': ["Atividade", "Activity"],
+    'alerts': ["Alertas", "Alerts"],
+    'travel_alerts': ["Alertas da viagem", "Travel alerts"],
+    'user_exists': [
+      "Esse usuário já existe. Informe outro email.",
+      "User already exists. Enter a different email."
+    ],
+    'min_length_msg': [
+      "O campo deve ter pelo menos $minInputLength caracteres.",
+      "The field must have at least $minInputLength characters."
+    ],
+    'max_length_msg': [
+      "O campo deve ter no máximo $maxInputLength caracteres.",
+      "The field must have a maximum of $maxInputLength characters."
+    ],
+    'password_length_msg': [
+      "A senha deve ter pelo menos $minPasswordLength caracteres",
+      "Password must have at least $minPasswordLength characters"
     ],
   };
 }

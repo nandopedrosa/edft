@@ -25,69 +25,64 @@ class AboutScreenState extends State<AboutScreen> {
       onWillPop: () async {
         return false;
       },
-      child: WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: Scaffold(
-          bottomNavigationBar:
-              const MyBottomNavigationBar(currentPage: aboutPageIndex),
-          appBar: AppBar(
-            titleTextStyle: appBarTitle,
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Text(
-              LocalizationService.instance.getLocalizedString("about"),
-            ),
+      child: Scaffold(
+        bottomNavigationBar:
+            const MyBottomNavigationBar(currentPage: aboutPageIndex),
+        appBar: AppBar(
+          titleTextStyle: appBarTitle,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            LocalizationService.instance.getLocalizedString("about"),
           ),
-          body: Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListView(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      LocalizationService.instance
-                          .getLocalizedString("app_title"),
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      LocalizationService.instance
-                          .getLocalizedString("about_app"),
-                      style: const TextStyle(color: Colors.white70),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      LocalizationService.instance
-                          .getLocalizedString("questions_suggestions_contact"),
-                      style: const TextStyle(color: Colors.white70),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: const Text(
-                      "marcosmelo@gmail.com",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                ],
-              )),
         ),
+        body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: ListView(
+              children: <Widget>[
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    LocalizationService.instance
+                        .getLocalizedString("app_title"),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    LocalizationService.instance
+                        .getLocalizedString("about_app"),
+                    style: const TextStyle(color: Colors.white70),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    LocalizationService.instance
+                        .getLocalizedString("questions_suggestions_contact"),
+                    style: const TextStyle(color: Colors.white70),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: const Text(
+                    "marcosmelo@gmail.com",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            )),
       ),
     );
   }

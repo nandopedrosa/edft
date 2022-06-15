@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Form(
                     key: _formKey,
                     child: Card(
-                      color: cardColor,
+                      color: const Color.fromRGBO(35, 37, 47, 0.9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -198,6 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       LocalizationService.instance
                                           .getLocalizedString("signup"),
                                       style: const TextStyle(
+                                        color: blueColor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

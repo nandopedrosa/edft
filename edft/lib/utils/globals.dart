@@ -1,8 +1,13 @@
-//Navigation
 import 'package:edft/utils/models.dart';
 import 'package:flutter/material.dart';
 import '../localization/localization_service.dart';
 
+//Forms
+const int minInputLength = 3;
+const int maxInputLength = 128;
+const int minPasswordLength = 6;
+
+//Navigation
 const int homePageIndex = 0;
 const int profilePageIndex = 1;
 const int aboutPageIndex = 2;

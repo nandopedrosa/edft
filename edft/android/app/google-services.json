@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "831567983436",
+    "project_id": "edft-23744",
+    "storage_bucket": "edft-23744.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831567983436:android:1199d87e12ac6b8da615e9",
+        "android_client_info": {
+          "package_name": "com.edff.edft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831567983436-oiuhlcll04p9s0qq7f6938b8te1gl912.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNFEOgD63bhBaqSrHHKyclm1Y6z3usDUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831567983436-oiuhlcll04p9s0qq7f6938b8te1gl912.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

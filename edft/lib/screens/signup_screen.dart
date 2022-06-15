@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'dart:typed_data';
+import 'package:edft/models/app_user.dart';
 import 'package:edft/screens/signup_success_screen.dart';
+import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
@@ -33,14 +36,29 @@ class SignupScreenState extends State<SignupScreen> {
 
   signup(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      //TODO: criar conta no Firebase
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SignupSuccessScreen(),
-        ),
-      );
+      //Validate if user already exists
+      UserService.checkIfUserExists(_emailController.text).then((userExists) {
+        if (userExists) {
+          showSnackBar(
+              context,
+              LocalizationService.instance.getLocalizedString("user_exists"),
+              'error');
+        } else {
+          UserService.createUser(_nameController.text, _emailController.text,
+              _passwordController.text);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignupSuccessScreen(),
+            ),
+          );
+        }
+      });
     }
+  }
+
+  bool userExists(String email) {
+    return false;
   }
 
   selectImage() async {
@@ -112,6 +130,17 @@ class SignupScreenState extends State<SignupScreen> {
                         return LocalizationService.instance
                             .getLocalizedString("mandatory_field");
                       }
+
+                      if (value.length < minInputLength) {
+                        return LocalizationService.instance
+                            .getLocalizedString("min_length_msg");
+                      }
+
+                      if (value.length > maxInputLength) {
+                        return LocalizationService.instance
+                            .getLocalizedString("max_length_msg");
+                      }
+
                       return null;
                     },
                   ),
@@ -131,6 +160,16 @@ class SignupScreenState extends State<SignupScreen> {
                         return LocalizationService.instance
                             .getLocalizedString("mandatory_field");
                       }
+
+                      if (value.length < minInputLength) {
+                        return LocalizationService.instance
+                            .getLocalizedString("min_length_msg");
+                      }
+
+                      if (value.length > maxInputLength) {
+                        return LocalizationService.instance
+                            .getLocalizedString("max_length_msg");
+                      }
                       return null;
                     },
                   ),
@@ -149,6 +188,11 @@ class SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return LocalizationService.instance
                             .getLocalizedString("mandatory_field");
+                      }
+
+                      if (value.length < minPasswordLength) {
+                        return LocalizationService.instance
+                            .getLocalizedString("password_length_msg");
                       }
                       return null;
                     },
