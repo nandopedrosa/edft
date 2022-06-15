@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:typed_data';
-import 'package:edft/models/app_user.dart';
 import 'package:edft/screens/signup_success_screen.dart';
 import 'package:edft/service/user_service.dart';
 import 'package:edft/utils/globals.dart';
@@ -34,31 +33,25 @@ class SignupScreenState extends State<SignupScreen> {
     _passwordController.dispose();
   }
 
-  signup(BuildContext context) {
+  signup(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      //Validate if user already exists
-      UserService.checkIfUserExists(_emailController.text).then((userExists) {
-        if (userExists) {
-          showSnackBar(
-              context,
-              LocalizationService.instance.getLocalizedString("user_exists"),
-              'error');
-        } else {
-          UserService.createUser(_nameController.text, _emailController.text,
-              _passwordController.text);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignupSuccessScreen(),
-            ),
-          );
-        }
-      });
-    }
-  }
+      String res = await UserService().signupUser(
+          name: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          avatar: _image);
 
-  bool userExists(String email) {
-    return false;
+      if (res == 'success') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignupSuccessScreen(),
+          ),
+        );
+      } else {
+        showSnackBar(context, res, 'error');
+      }
+    }
   }
 
   selectImage() async {

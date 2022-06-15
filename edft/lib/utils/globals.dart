@@ -12,6 +12,9 @@ const int homePageIndex = 0;
 const int profilePageIndex = 1;
 const int aboutPageIndex = 2;
 
+//Firebase
+const String avatarFolder = "avatars";
+
 //Dropdowns
 final List<DropdownMenuItem<String>> genderList = [
   DropdownMenuItem(

@@ -181,5 +181,15 @@ class LocalizationStrings {
       "A senha deve ter pelo menos $minPasswordLength caracteres",
       "Password must have at least $minPasswordLength characters"
     ],
+    'email_already_in_use': [
+      "Este email já está em uso. Por favor, escolha outro.",
+      "Email already in use. Please choose another."
+    ],
+    'invalid_email': ["Email inválido.", "Invalid email."],
+    'weak_password': ["Senha muito fraca.", "Weak password."],
+    'unknown_error': [
+      "Erro desconhecido. Entre em contato com o adminstrador do app.",
+      "Unknown error. Please inform the app administrator."
+    ]
   };
 }
