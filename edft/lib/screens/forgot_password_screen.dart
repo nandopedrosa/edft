@@ -1,6 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'package:edft/screens/password_reset_screen.dart';
+import 'package:edft/screens/password_reset_email_sent_screen.dart';
+import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
@@ -78,16 +80,21 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: ElevatedButton(
                     child: Text(LocalizationService.instance
                         .getLocalizedString("continue")),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        //TODO: resetar senha do usuário no Firebase, enviar código por email
-                        print("informou email para resetar senha!");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PasswordResetScreen(),
-                          ),
-                        );
+                        String res = await UserService()
+                            .resetPassword(email: _emailController.text);
+                        if (res == 'success') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PasswordResetEmailSentScreen(),
+                            ),
+                          );
+                        } else {
+                          showSnackBar(context, res, 'error');
+                        }
                       }
                     },
                   ),

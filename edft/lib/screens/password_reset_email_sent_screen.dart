@@ -1,21 +1,22 @@
 // ignore_for_file: avoid_print
 
 import 'package:edft/screens/login_screen.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 import '../localization/localization_service.dart';
 
-class PasswordResetSuccessScreen extends StatefulWidget {
-  const PasswordResetSuccessScreen({Key? key}) : super(key: key);
+class PasswordResetEmailSentScreen extends StatefulWidget {
+  const PasswordResetEmailSentScreen({Key? key}) : super(key: key);
 
   @override
-  State<PasswordResetSuccessScreen> createState() =>
-      PasswordResetSuccessScreenState();
+  State<PasswordResetEmailSentScreen> createState() =>
+      PasswordResetEmailSentScreenState();
 }
 
-class PasswordResetSuccessScreenState
-    extends State<PasswordResetSuccessScreen> {
+class PasswordResetEmailSentScreenState
+    extends State<PasswordResetEmailSentScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -40,9 +41,20 @@ class PasswordResetSuccessScreenState
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
+                  child: const Icon(
+                    Icons.check_circle_outline,
+                    color: successColor,
+                    size: 64,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
                   child: Text(
                     LocalizationService.instance
-                        .getLocalizedString("password_reset_success"),
+                        .getLocalizedString("password_reset_email_sent"),
                     textAlign: TextAlign.center,
                   ),
                 ),

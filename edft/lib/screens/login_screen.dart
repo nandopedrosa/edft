@@ -1,9 +1,11 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 import 'package:edft/localization/localization_service.dart';
 import 'package:edft/screens/forgot_password_screen.dart';
 import 'package:edft/screens/home_screen.dart';
 import 'package:edft/screens/signup_screen.dart';
+import 'package:edft/service/user_service.dart';
 import 'package:edft/utils/colors.dart';
+import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -15,26 +17,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
   }
 
-  login(BuildContext context) {
+  login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      //TODO: logar no firebase
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
+      String res = await UserService().loginUser(
+          email: _emailController.text, password: _passwordController.text);
+      if (res == 'success') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      } else {
+        showSnackBar(context, res, 'error');
+      }
     }
   }
 
@@ -75,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             TextFormField(
-                              controller: _usernameController,
+                              controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

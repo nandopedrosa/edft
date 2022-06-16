@@ -45,9 +45,9 @@ class LocalizationStrings {
     ],
     'confirm': ["Confirmar", "Confirm"],
     'success': ["Sucesso", "Success"],
-    'password_reset_success': [
-      "Sua senha foi redefinida com sucesso! Agora você já pode fazer o login. Boas viagens!",
-      "Password successfully reset! Now you can log in. Travel safe!"
+    'password_reset_email_sent': [
+      "Verifique a sua caixa de email e siga os procedimentos para redifinir sua senha! Depois, retorne à tela inicial para realizar o login na aplicação. ",
+      "Check your email inbox and follow the instructions to reset your password! Then, go back to the login page and try to sign."
     ],
     'signup_success': [
       "Sua conta foi criada com sucesso! Agora você já pode fazer o login. Boas viagens!",
@@ -187,9 +187,12 @@ class LocalizationStrings {
     ],
     'invalid_email': ["Email inválido.", "Invalid email."],
     'weak_password': ["Senha muito fraca.", "Weak password."],
+    'wrong_password': ["Senha inválida.", "Wrong password"],
+    'user_not_found': ["Usuário não encontrado.", "User not found."],
     'unknown_error': [
       "Erro desconhecido. Entre em contato com o adminstrador do app.",
       "Unknown error. Please inform the app administrator."
-    ]
+    ],
+    'sign_out': ["Sair", "Sign out"],
   };
 }

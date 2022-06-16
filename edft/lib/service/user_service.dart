@@ -33,7 +33,7 @@ class UserService {
             .uploadImageToStorage(avatarFolder, cred.user!.uid, avatar);
       }
       //Create User (Doc)
-      createUser(cred.user!.uid, name, avatarUrl);
+      _createUser(cred.user!.uid, name, avatarUrl);
     } on FirebaseAuthException catch (err) {
       var errorCode = err.code;
       if (errorCode == 'email-already-in-use') {
@@ -50,8 +50,47 @@ class UserService {
     return res;
   }
 
-  Future<void> createUser(String id, String name, String? avatarUrl) async {
+  Future<void> _createUser(String id, String name, String? avatarUrl) async {
     AppUser user = AppUser(id: id, name: name, avatarUrl: avatarUrl);
     await _collection.doc(id).set(AppUser.toJson(user));
+  }
+
+  Future<String> loginUser(
+      {required String email, required String password}) async {
+    String res = "success";
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (err) {
+      var errorCode = err.code;
+      if (errorCode == 'invalid-email') {
+        res = LocalizationService.instance.getLocalizedString("invalid_email");
+      } else if (errorCode == 'user-not-found') {
+        res = LocalizationService.instance.getLocalizedString("user_not_found");
+      } else if (errorCode == 'wrong-password') {
+        res = LocalizationService.instance.getLocalizedString("wrong_password");
+      } else {
+        res = LocalizationService.instance.getLocalizedString("unknown_error");
+      }
+    }
+    return res;
+  }
+
+  Future<String> resetPassword({required String email}) async {
+    String res = "success";
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (err) {
+      var errorCode = err.code;
+      if (errorCode == 'invalid-email') {
+        res = LocalizationService.instance.getLocalizedString("invalid_email");
+      } else if (errorCode == 'user-not-found') {
+        res = LocalizationService.instance.getLocalizedString("user_not_found");
+      }
+    }
+    return res;
+  }
+
+  Future<void> logoutUser() async {
+    await _auth.signOut();
   }
 }

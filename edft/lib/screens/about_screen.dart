@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:edft/screens/login_screen.dart';
+import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -78,6 +81,26 @@ class AboutScreenState extends State<AboutScreen> {
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.logout),
+                    style: ElevatedButton.styleFrom(primary: secondaryColor),
+                    label: Text(LocalizationService.instance
+                        .getLocalizedString("sign_out")),
+                    onPressed: () {
+                      UserService().logoutUser();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 30),
