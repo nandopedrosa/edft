@@ -1,5 +1,7 @@
+import 'package:edft/screens/home_screen.dart';
 import 'package:edft/screens/login_screen.dart';
 import 'package:edft/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // ignore: depend_on_referenced_packages
@@ -34,7 +36,34 @@ class MyApp extends StatelessWidget {
           displayColor: Colors.white,
         ),
       ),
-      home: const LoginScreen(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            //Loading app - show progress indicador
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                ),
+              );
+            }
+
+            //User authenticated
+            if (snapshot.connectionState == ConnectionState.active) {
+              //successfully
+              if (snapshot.hasData) {
+                return const HomeScreen();
+              } else if (snapshot.hasError) {
+                //with error
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            }
+
+            //User not authenticated - just show login screen
+            return const LoginScreen();
+          }),
     );
   }
 }

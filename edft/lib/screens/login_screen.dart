@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -30,6 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       String res = await UserService().loginUser(
           email: _emailController.text, password: _passwordController.text);
       if (res == 'success') {
@@ -42,6 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         showSnackBar(context, res, 'error');
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -167,7 +175,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   color: blueColor,
                                 ),
-                                child: const Text("Log in"),
+                                child: _isLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                          color: primaryColor,
+                                        ),
+                                      )
+                                    : const Text("Log in"),
                               ),
                             ),
                             const SizedBox(
