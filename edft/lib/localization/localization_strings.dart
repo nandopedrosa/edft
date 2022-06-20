@@ -194,5 +194,7 @@ class LocalizationStrings {
       "Unknown error. Please inform the app administrator."
     ],
     'sign_out': ["Sair", "Sign out"],
+    'change_picture': ["Mudar foto", "Change picture"],
+    'update_successful': ['Atualização realizada', "Update successful"],
   };
 }

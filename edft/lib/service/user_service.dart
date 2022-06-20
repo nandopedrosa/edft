@@ -1,17 +1,29 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
+// ignore_for_file: avoid_function_literals_in_foreach_calls, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edft/localization/localization_service.dart';
 import 'package:edft/models/app_user.dart';
+import 'package:edft/providers/app_user_provider.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/storage_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'dart:typed_data';
+
+import 'package:provider/provider.dart';
 
 class UserService {
   final CollectionReference _collection =
       FirebaseFirestore.instance.collection('users');
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<AppUser> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snap = await _collection.doc(currentUser.uid).get();
+    Map<String, dynamic> userJson = snap.data() as Map<String, dynamic>;
+    AppUser user = AppUser.fromJson(userJson);
+    return user;
+  }
 
   Future<String> signupUser({
     required String name,
@@ -33,7 +45,7 @@ class UserService {
             .uploadImageToStorage(avatarFolder, cred.user!.uid, avatar);
       }
       //Create User (Doc)
-      _createUser(cred.user!.uid, name, avatarUrl);
+      _createUser(cred.user!.uid, cred.user!.email!, name, avatarUrl);
     } on FirebaseAuthException catch (err) {
       var errorCode = err.code;
       if (errorCode == 'email-already-in-use') {
@@ -50,9 +62,17 @@ class UserService {
     return res;
   }
 
-  Future<void> _createUser(String id, String name, String? avatarUrl) async {
-    AppUser user = AppUser(id: id, name: name, avatarUrl: avatarUrl);
+  Future<void> _createUser(
+      String id, String email, String name, String? avatarUrl) async {
+    AppUser user =
+        AppUser(id: id, email: email, name: name, avatarUrl: avatarUrl);
     await _collection.doc(id).set(AppUser.toJson(user));
+  }
+
+  Future<void> updateUser(AppUser user, BuildContext context) async {
+    await _collection.doc(user.id).set(AppUser.toJson(user));
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   Future<String> loginUser(

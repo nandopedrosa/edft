@@ -2,6 +2,7 @@
 
 import 'package:edft/screens/password_reset_email_sent_screen.dart';
 import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
@@ -19,11 +20,35 @@ class ForgotPasswordScreen extends StatefulWidget {
 class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
+  }
+
+  resetPassword(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      String res =
+          await UserService().resetPassword(email: _emailController.text);
+      if (res == 'success') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PasswordResetEmailSentScreen(),
+          ),
+        );
+      } else {
+        showSnackBar(context, res, 'error');
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -78,24 +103,17 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("continue")),
+                    child: _isLoading
+                        ? const Center(
+                            child:
+                                CircularProgressIndicator(color: primaryColor),
+                          )
+                        : Text(
+                            LocalizationService.instance
+                                .getLocalizedString("continue"),
+                          ),
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        String res = await UserService()
-                            .resetPassword(email: _emailController.text);
-                        if (res == 'success') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const PasswordResetEmailSentScreen(),
-                            ),
-                          );
-                        } else {
-                          showSnackBar(context, res, 'error');
-                        }
-                      }
+                      resetPassword(context);
                     },
                   ),
                 ),

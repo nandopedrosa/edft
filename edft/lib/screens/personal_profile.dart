@@ -1,12 +1,18 @@
 // ignore_for_file: avoid_print
 
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:edft/models/app_user.dart';
+import 'package:edft/providers/app_user_provider.dart';
+import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/colors.dart';
+import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
 
 class PersonalProfileScreen extends StatefulWidget {
@@ -19,10 +25,7 @@ class PersonalProfileScreen extends StatefulWidget {
 class PersonalProfileScreenState extends State<PersonalProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _yearOfBirthController = TextEditingController();
-  String? _selectedGender;
-  String? _selectedRelationshipStatus;
-  Country? _selectedCountry;
-
+  bool _isLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -36,6 +39,10 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppUser user = Provider.of<UserProvider>(context).getUser;
+    _yearOfBirthController.text =
+        user.yearOfBirth == null ? "" : user.yearOfBirth!;
+
     return Scaffold(
       bottomNavigationBar:
           const MyBottomNavigationBar(currentPage: profilePageIndex),
@@ -92,14 +99,14 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedGender,
+                    value: user.gender,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance.getLocalizedString("gender"),
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedGender = value;
+                        user.gender = value;
                       });
                     },
                     items: genderList,
@@ -108,7 +115,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedRelationshipStatus,
+                    value: user.relationShipStatus,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -116,7 +123,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedRelationshipStatus = value;
+                        user.relationShipStatus = value;
                       });
                     },
                     items: relationshipStatusList,
@@ -127,7 +134,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   child: DropdownSearch<Country>(
                     popupProps: PopupProps.menu(
                       isFilterOnline: false,
-                      showSelectedItems: false,
+                      showSelectedItems: true,
                       showSearchBox: true,
                       searchFieldProps: TextFieldProps(
                         decoration: InputDecoration(
@@ -144,10 +151,12 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                     showClearButton: true,
                     onChanged: (Country? data) {
                       setState(() {
-                        _selectedCountry = data;
+                        user.country = data;
                       });
                     },
-                    selectedItem: _selectedCountry,
+                    compareFn: (c1, c2) =>
+                        c1.code == c2.code, //Comparing countries
+                    selectedItem: user.country,
                     items:
                         LocalizationService.instance.getPreferredLanguage() ==
                                 'pt'
@@ -160,11 +169,28 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("update")),
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ))
+                        : Text(LocalizationService.instance
+                            .getLocalizedString("update")),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        print(_selectedGender);
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        user.yearOfBirth = _yearOfBirthController.text;
+                        UserService().updateUser(user, context);
+                        showSnackBar(
+                            context,
+                            LocalizationService.instance
+                                .getLocalizedString("update_successful"),
+                            "success");
+                        setState(() {
+                          _isLoading = false;
+                        });
                       }
                     },
                   ),

@@ -85,6 +85,20 @@ class Attraction {
     required this.image,
   });
 
+  static Map<String, dynamic> toJson(Attraction a) {
+    final Map<String, dynamic> attractionMap = {};
+    attractionMap['code'] = a.code;
+    attractionMap['name'] = a.name;
+    attractionMap['image'] = a.image;
+    return attractionMap;
+  }
+
+  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
+        code: json["code"],
+        name: json["name"],
+        image: json["image"],
+      );
+
   @override
   String toString() {
     return name;

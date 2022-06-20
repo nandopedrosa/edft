@@ -1,12 +1,17 @@
 // ignore_for_file: avoid_print
 
+import 'package:edft/models/app_user.dart';
+import 'package:edft/providers/app_user_provider.dart';
+import 'package:edft/service/user_service.dart';
 import 'package:edft/utils/colors.dart';
+import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../localization/localization_service.dart';
 
@@ -18,10 +23,7 @@ class TravelProfileScreen extends StatefulWidget {
 }
 
 class TravelProfileScreenState extends State<TravelProfileScreen> {
-  String? _selectedAccomodationPreference;
-  String? _selectedTransportPreference;
-  String? _selectedAttractionsPreferences;
-  String? _selectedBudgetPreference;
+  bool _isLoading = false;
   final _attractions = attractionPreferencesList
       .map((attraction) =>
           MultiSelectItem<Attraction>(attraction, attraction.name))
@@ -36,6 +38,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppUser user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       bottomNavigationBar:
           const MyBottomNavigationBar(currentPage: profilePageIndex),
@@ -66,7 +69,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedAccomodationPreference,
+                    value: user.preferenceAccomodation,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -74,7 +77,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedAccomodationPreference = value;
+                        user.preferenceAccomodation = value;
                       });
                     },
                     items: accomodationPreferenceList,
@@ -83,7 +86,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedTransportPreference,
+                    value: user.preferenceTransport,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -91,7 +94,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedTransportPreference = value;
+                        user.preferenceTransport = value;
                       });
                     },
                     items: transportPreferenceList,
@@ -100,7 +103,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedBudgetPreference,
+                    value: user.preferenceBudget,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -108,7 +111,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedBudgetPreference = value;
+                        user.preferenceBudget = value;
                       });
                     },
                     items: budgetPreferenceList,
@@ -156,9 +159,10 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                       ),
                       items: _attractions,
                       onConfirm: (List<Attraction> attractions) {
-                        String a = getAttractionsAsString(attractions);
                         setState(() {
-                          _selectedAttractionsPreferences = a;
+                          for (Attraction a in attractions) {
+                            user.addAttraction(a.code);
+                          }
                         });
                       },
                     )),
@@ -169,13 +173,30 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("update")),
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
+                          )
+                        : Text(LocalizationService.instance
+                            .getLocalizedString("update")),
                     onPressed: () {
-                      print(_selectedAccomodationPreference);
-                      print(_selectedAttractionsPreferences);
-                      print(_selectedBudgetPreference);
-                      print(_selectedTransportPreference);
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      UserService().updateUser(user, context);
+                      showSnackBar(
+                        context,
+                        LocalizationService.instance
+                            .getLocalizedString("update_successful"),
+                        'success',
+                      );
+
+                      setState(() {
+                        _isLoading = false;
+                      });
                     },
                   ),
                 ),
@@ -183,16 +204,5 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
             ),
           )),
     );
-  }
-
-  String getAttractionsAsString(List<Attraction> attractions) {
-    String result = "";
-    for (Attraction a in attractions) {
-      result += "${a.code},";
-    }
-    if (result.isNotEmpty) {
-      result = result.substring(0, result.length - 1);
-    }
-    return result;
   }
 }

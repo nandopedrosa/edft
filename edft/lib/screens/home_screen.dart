@@ -1,4 +1,7 @@
 // ignore_for_file: avoid_print
+
+import 'package:edft/models/app_user.dart';
+import 'package:edft/providers/app_user_provider.dart';
 import 'package:edft/screens/travel_details.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/globals.dart';
@@ -6,6 +9,7 @@ import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/trip_entry.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +20,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  //Refresh User Data here so that we can use in future screens
+  getUserData() async {
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -53,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: ListView(
-            children: const <Widget>[
+            children: <Widget>[
               TripEntry(),
               Divider(
                 color: offWhiteColor,

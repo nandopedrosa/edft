@@ -30,6 +30,7 @@ class TextFormFieldInput extends StatelessWidget {
       validator: validator,
       maxLength: inputSize,
       decoration: InputDecoration(
+        counterText: "",
         labelText: labelText,
         hintText: hintText,
         border: inputBorder,

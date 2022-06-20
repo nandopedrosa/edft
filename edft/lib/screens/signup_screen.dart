@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 import 'package:edft/screens/signup_success_screen.dart';
 import 'package:edft/service/user_service.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
@@ -24,6 +25,7 @@ class SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   Uint8List? _image;
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -35,6 +37,9 @@ class SignupScreenState extends State<SignupScreen> {
 
   signup(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       String res = await UserService().signupUser(
           name: _nameController.text,
           email: _emailController.text,
@@ -51,6 +56,10 @@ class SignupScreenState extends State<SignupScreen> {
       } else {
         showSnackBar(context, res, 'error');
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -198,8 +207,15 @@ class SignupScreenState extends State<SignupScreen> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("create_account")),
+                    child: _isLoading
+                        ? const Center(
+                            child:
+                                CircularProgressIndicator(color: primaryColor),
+                          )
+                        : Text(
+                            LocalizationService.instance
+                                .getLocalizedString("create_account"),
+                          ),
                     onPressed: () {
                       signup(context);
                     },
