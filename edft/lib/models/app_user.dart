@@ -1,4 +1,5 @@
 import 'package:edft/utils/functions.dart';
+import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
 
 class AppUser {
@@ -13,7 +14,7 @@ class AppUser {
   String? preferenceAccomodation;
   String? preferenceTransport;
   String? preferenceBudget;
-  List? preferenceAttractions;
+  List? preferenceAttractions; //attraction codes, NOT attraction objects
 
   AppUser(
       {required this.id,
@@ -61,14 +62,21 @@ class AppUser {
       preferenceBudget: json['preferenceBudget'],
       preferenceAttractions: json['preferenceAttractions']);
 
-  void addAttraction(String attractionCode) {
-    preferenceAttractions ??= [];
-    preferenceAttractions!.add(attractionCode);
-  }
-
   @override
   String toString() {
     return email;
+  }
+
+  List<Attraction> getAttractions() {
+    List<Attraction> res = [];
+    if (preferenceAttractions != null && preferenceAttractions!.isNotEmpty) {
+      for (Attraction a in attractionPreferencesList) {
+        if (preferenceAttractions!.contains(a.code)) {
+          res.add(a);
+        }
+      }
+    }
+    return res;
   }
 
   @override

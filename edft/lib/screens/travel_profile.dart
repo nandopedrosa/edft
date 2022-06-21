@@ -119,7 +119,8 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                 ),
                 Container(
                     padding: const EdgeInsets.all(10),
-                    child: MultiSelectDialogField(
+                    child: MultiSelectDialogField<Attraction>(
+                      initialValue: user.getAttractions(),
                       selectedItemsTextStyle:
                           const TextStyle(color: Colors.blue),
                       itemsTextStyle: const TextStyle(color: Colors.white),
@@ -160,9 +161,11 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                       items: _attractions,
                       onConfirm: (List<Attraction> attractions) {
                         setState(() {
+                          List<String> selectedAttractions = [];
                           for (Attraction a in attractions) {
-                            user.addAttraction(a.code);
+                            selectedAttractions.add(a.code);
                           }
+                          user.preferenceAttractions = selectedAttractions;
                         });
                       },
                     )),
