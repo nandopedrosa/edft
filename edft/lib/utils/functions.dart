@@ -77,7 +77,7 @@ Country? getCountryFromCode(String? code) {
   String lang = LocalizationService.instance.getPreferredLanguage();
   List<Country> listOfCountries = [];
   if (lang == 'pt') {
-    listOfCountries = countriesBr;
+    listOfCountries = countriesPt;
   } else {
     listOfCountries = countriesEn;
   }

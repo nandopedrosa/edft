@@ -1,4 +1,5 @@
 import 'package:edft/providers/app_user_provider.dart';
+import 'package:edft/providers/travel_provider.dart';
 import 'package:edft/screens/home_screen.dart';
 import 'package:edft/screens/login_screen.dart';
 import 'package:edft/utils/colors.dart';
@@ -17,7 +18,6 @@ Future main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   final bool isUserLoggedIn = false;
 
   // This widget is the root of your application.
@@ -27,7 +27,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TravelProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'EDFT',

@@ -96,7 +96,7 @@ class LocalizationStrings {
       "Preferência de transporte",
       "Transport preference"
     ],
-    'transport': ["Transporte", "Transporte"],
+    'transport': ["Transporte", "Transport"],
     'car': ["Carro", "Car"],
     'bus': ["Ônibus", "Bus"],
     'train': ["Trem", "Train"],
@@ -130,6 +130,7 @@ class LocalizationStrings {
       "Detalhes da viagem atualizados.",
       "Travel details updated."
     ],
+    'travel_created': ["Viagem criada.", "Travel created."],
     'dont_forget_to_add_places': [
       "Não esqueça de adicionar locais ao seu roteiro!",
       "Don't forget to add places to your itinerary!"
@@ -196,5 +197,9 @@ class LocalizationStrings {
     'sign_out': ["Sair", "Sign out"],
     'change_picture': ["Mudar foto", "Change picture"],
     'update_successful': ['Atualização realizada', "Update successful"],
+    'arrival_departure_mandatories': [
+      "As datas de chegada e partida são obrigatórias.",
+      "Arrival and departure dates are mandatories."
+    ],
   };
 }

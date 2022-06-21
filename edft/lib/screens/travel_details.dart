@@ -1,8 +1,11 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:edft/models/travel.dart';
+import 'package:edft/providers/travel_provider.dart';
 import 'package:edft/screens/itinerary_screen.dart';
 import 'package:edft/screens/attractions_menu_screen.dart';
+import 'package:edft/service/travel_service.dart';
 import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
@@ -11,10 +14,12 @@ import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
 
 class TravelDetailsScreen extends StatefulWidget {
-  const TravelDetailsScreen({Key? key}) : super(key: key);
+  String? travelId;
+  TravelDetailsScreen({Key? key, this.travelId}) : super(key: key);
 
   @override
   State<TravelDetailsScreen> createState() => TravelDetailsScreenState();
@@ -25,13 +30,8 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
   final TextEditingController _travelNameController = TextEditingController();
   final TextEditingController _numberOfTravelersController =
       TextEditingController();
-  Country? _selectedCountry;
-  City? _selectedCity;
-  String? _selectedTransport;
-  String? _selectedAccomodation;
   DateTime? _arrivalDate;
   DateTime? _departureDate;
-  String? _travelId;
 
   @override
   void dispose() {
@@ -42,6 +42,15 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    getTravelData();
+  }
+
+  getTravelData() async {
+    //Travel ID can be null if we are creating a new one
+    if (widget.travelId != null) {
+      TravelProvider travelProvider = Provider.of(context, listen: false);
+      await travelProvider.refreshTravel(widget.travelId!);
+    }
   }
 
   List<City> _getCities(Country? country) {
@@ -78,6 +87,19 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Travel travel = Travel.empty();
+    if (widget.travelId != null) {
+      travel = Provider.of<TravelProvider>(context).getTravel;
+    }
+
+    _travelNameController.text = travel.name ?? "";
+    _numberOfTravelersController.text = travel.numberOfTravelers ?? "";
+    _arrivalDate =
+        travel.arrivalDate != null ? DateTime.parse(travel.arrivalDate!) : null;
+    _departureDate = travel.departureDate != null
+        ? DateTime.parse(travel.departureDate!)
+        : null;
+
     return Scaffold(
       bottomNavigationBar:
           const MyBottomNavigationBar(currentPage: homePageIndex),
@@ -94,9 +116,6 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: Text(
@@ -104,6 +123,9 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                         .getLocalizedString("travel_details_disclaimer"),
                     textAlign: TextAlign.center,
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -172,9 +194,6 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
@@ -208,7 +227,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedTransport,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return LocalizationService.instance
+                            .getLocalizedString("mandatory_field");
+                      }
+                      return null;
+                    },
+                    value: travel.transportCode,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -216,7 +242,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedTransport = value;
+                        travel.transportCode = value;
                       });
                     },
                     items: transportPreferenceList,
@@ -225,7 +251,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
-                    value: _selectedAccomodation,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return LocalizationService.instance
+                            .getLocalizedString("mandatory_field");
+                      }
+                      return null;
+                    },
+                    value: travel.accomodationCode,
                     decoration: getDropdownDecoration(
                       context,
                       LocalizationService.instance
@@ -233,7 +266,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _selectedAccomodation = value;
+                        travel.accomodationCode = value;
                       });
                     },
                     items: accomodationPreferenceList,
@@ -242,6 +275,13 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownSearch<Country>(
+                    validator: (Country? value) {
+                      if (value == null) {
+                        return LocalizationService.instance
+                            .getLocalizedString("mandatory_field");
+                      }
+                      return null;
+                    },
                     popupProps: PopupProps.menu(
                       isFilterOnline: false,
                       showSelectedItems: false,
@@ -261,43 +301,51 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                     showClearButton: true,
                     onChanged: (Country? data) {
                       setState(() {
-                        _selectedCountry = data;
+                        travel.countryCode = data!.code;
                       });
                     },
-                    selectedItem: _selectedCountry,
+                    selectedItem: travel.getCountry(),
                     items:
                         LocalizationService.instance.getPreferredLanguage() ==
                                 'pt'
-                            ? countriesBr
+                            ? countriesPt
                             : countriesEn,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownSearch<City>(
-                      popupProps: PopupProps.menu(
-                        isFilterOnline: false,
-                        showSelectedItems: false,
-                        showSearchBox: true,
-                        searchFieldProps: TextFieldProps(
-                          decoration: InputDecoration(
-                              label: Text(LocalizationService.instance
-                                  .getLocalizedString("search_ellipsis"))),
-                        ),
+                    validator: (City? value) {
+                      if (value == null) {
+                        return LocalizationService.instance
+                            .getLocalizedString("mandatory_field");
+                      }
+                      return null;
+                    },
+                    popupProps: PopupProps.menu(
+                      isFilterOnline: false,
+                      showSelectedItems: false,
+                      showSearchBox: true,
+                      searchFieldProps: TextFieldProps(
+                        decoration: InputDecoration(
+                            label: Text(LocalizationService.instance
+                                .getLocalizedString("search_ellipsis"))),
                       ),
-                      dropdownSearchDecoration: getDropdownDecoration(
-                        context,
-                        LocalizationService.instance.getLocalizedString("city"),
-                      ),
-                      itemAsString: (City c) => c.toString(),
-                      showClearButton: true,
-                      onChanged: (City? data) {
-                        setState(() {
-                          _selectedCity = data;
-                        });
-                      },
-                      selectedItem: _selectedCity,
-                      items: _getCities(_selectedCountry)),
+                    ),
+                    dropdownSearchDecoration: getDropdownDecoration(
+                      context,
+                      LocalizationService.instance.getLocalizedString("city"),
+                    ),
+                    itemAsString: (City c) => c.toString(),
+                    showClearButton: true,
+                    onChanged: (City? data) {
+                      setState(() {
+                        travel.cityId = data!.id;
+                      });
+                    },
+                    selectedItem: travel.getCity(),
+                    items: _getCities(travel.getCountry()),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -310,18 +358,32 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                         .getLocalizedString("confirm")),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        //TODO: cadastrar viagem
-                        print(_arrivalDate);
-                        print(_departureDate);
-                        print(_selectedCity);
+                        //Validate dates (the rest is validated through the Form)
+                        if (_arrivalDate == null || _departureDate == null) {
+                          showSnackBar(
+                              context,
+                              LocalizationService.instance.getLocalizedString(
+                                  "arrival_departure_mandatories"),
+                              "error");
+                          return;
+                        } else {
+                          travel.arrivalDate = _arrivalDate!.toIso8601String();
+                          travel.departureDate =
+                              _departureDate!.toIso8601String();
+                        }
 
-                        if (_travelId == null || _travelId!.isEmpty) {
-                          //New travel
+                        travel.name = _travelNameController.text;
+                        travel.numberOfTravelers =
+                            _numberOfTravelersController.text;
+
+                        if (widget.travelId == null ||
+                            widget.travelId!.isEmpty) {
+                          TravelService().updateTravel(travel, context);
                           showSnackBar(
                             context,
                             // ignore: prefer_interpolation_to_compose_strings
-                            LocalizationService.instance.getLocalizedString(
-                                    "travel_details_updated") +
+                            LocalizationService.instance
+                                    .getLocalizedString("travel_created") +
                                 " " +
                                 LocalizationService.instance.getLocalizedString(
                                     "dont_forget_to_add_places"),

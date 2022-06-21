@@ -19,6 +19,8 @@ const double avatarRadius = 128;
 const String avatarFolder = "avatars";
 
 //Dropdowns
+
+//Gender
 final List<DropdownMenuItem<String>> genderList = [
   DropdownMenuItem(
     value: "M",
@@ -34,6 +36,7 @@ final List<DropdownMenuItem<String>> genderList = [
   )
 ];
 
+//Relationship Status
 final List<DropdownMenuItem<String>> relationshipStatusList = [
   DropdownMenuItem(
     value: "S",
@@ -50,6 +53,7 @@ final List<DropdownMenuItem<String>> relationshipStatusList = [
   )
 ];
 
+//Accomodations
 final List<DropdownMenuItem<String>> accomodationPreferenceList = [
   const DropdownMenuItem(
     value: "hotel",
@@ -61,6 +65,7 @@ final List<DropdownMenuItem<String>> accomodationPreferenceList = [
   ),
 ];
 
+//Transports
 final List<DropdownMenuItem<String>> transportPreferenceList = [
   DropdownMenuItem(
     value: "car",
@@ -76,6 +81,7 @@ final List<DropdownMenuItem<String>> transportPreferenceList = [
   ),
 ];
 
+//Budgets
 final List<DropdownMenuItem<String>> budgetPreferenceList = [
   DropdownMenuItem(
     value: "economic",
@@ -87,6 +93,7 @@ final List<DropdownMenuItem<String>> budgetPreferenceList = [
   ),
 ];
 
+//Attractions
 final List<Attraction> attractionPreferencesList = [
   Attraction(
     code: "bar",
@@ -110,7 +117,8 @@ final List<Attraction> attractionPreferencesList = [
   ),
 ];
 
-List<Country> countriesBr = [
+//Countries BR
+List<Country> countriesPt = [
   Country(code: "BR", name: "Brasil"),
   Country(code: "AF", name: "Afeganistão"),
   Country(code: "ZA", name: "África do Sul"),
@@ -292,6 +300,7 @@ List<Country> countriesBr = [
   Country(code: "PY", name: "Paraguai"),
 ];
 
+//Countries EN
 List<Country> countriesEn = [
   Country(code: "AF", name: "Afghanistan"),
   Country(code: "AX", name: "Åland Islands"),
@@ -544,6 +553,7 @@ List<Country> countriesEn = [
   Country(code: "ZW", name: "Zimbabwe"),
 ];
 
+//Cities PT
 List<City> citiesPt = [
   City(id: "1", countryCode: "BR", name: "Rio Branco"),
   City(id: "2", countryCode: "BR", name: "Maceió"),
@@ -575,6 +585,7 @@ List<City> citiesPt = [
   City(id: "28", countryCode: "IT", name: "Roma"),
 ];
 
+//Cities EN
 List<City> citiesEn = [
   City(id: "1", countryCode: "BR", name: "Rio Branco"),
   City(id: "2", countryCode: "BR", name: "Maceió"),

@@ -30,7 +30,7 @@ class AppUser {
       this.preferenceBudget,
       this.preferenceAttractions});
 
-  static Map<String, dynamic> toJson(AppUser appUser) {
+  static Map<String, dynamic> toMap(AppUser appUser) {
     final Map<String, dynamic> appUserMap = {};
     appUserMap['id'] = appUser.id;
     appUserMap['email'] = appUser.email;
@@ -48,19 +48,20 @@ class AppUser {
     return appUserMap;
   }
 
-  factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-      id: json["id"],
-      email: json["email"],
-      name: json["name"],
-      avatarUrl: json["avatarUrl"],
-      yearOfBirth: json["yearOfBirth"],
-      gender: json["gender"],
-      relationShipStatus: json["relationShipStatus"],
-      country: getCountryFromCode(json["country"]),
-      preferenceAccomodation: json['preferenceAccomodation'],
-      preferenceTransport: json['preferenceTransport'],
-      preferenceBudget: json['preferenceBudget'],
-      preferenceAttractions: json['preferenceAttractions']);
+  factory AppUser.fromMap(Map<String, dynamic> json) => AppUser(
+        id: json["id"],
+        email: json["email"],
+        name: json["name"],
+        avatarUrl: json["avatarUrl"],
+        yearOfBirth: json["yearOfBirth"],
+        gender: json["gender"],
+        relationShipStatus: json["relationShipStatus"],
+        country: getCountryFromCode(json["country"]),
+        preferenceAccomodation: json['preferenceAccomodation'],
+        preferenceTransport: json['preferenceTransport'],
+        preferenceBudget: json['preferenceBudget'],
+        preferenceAttractions: json['preferenceAttractions'],
+      );
 
   @override
   String toString() {

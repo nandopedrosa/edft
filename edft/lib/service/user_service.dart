@@ -21,7 +21,7 @@ class UserService {
     User currentUser = _auth.currentUser!;
     DocumentSnapshot snap = await _collection.doc(currentUser.uid).get();
     Map<String, dynamic> userJson = snap.data() as Map<String, dynamic>;
-    AppUser user = AppUser.fromJson(userJson);
+    AppUser user = AppUser.fromMap(userJson);
     return user;
   }
 
@@ -66,11 +66,11 @@ class UserService {
       String id, String email, String name, String? avatarUrl) async {
     AppUser user =
         AppUser(id: id, email: email, name: name, avatarUrl: avatarUrl);
-    await _collection.doc(id).set(AppUser.toJson(user));
+    await _collection.doc(id).set(AppUser.toMap(user));
   }
 
   Future<void> updateUser(AppUser user, BuildContext context) async {
-    await _collection.doc(user.id).set(AppUser.toJson(user));
+    await _collection.doc(user.id).set(AppUser.toMap(user));
     UserProvider userProvider = Provider.of(context, listen: false);
     await userProvider.refreshUser();
   }

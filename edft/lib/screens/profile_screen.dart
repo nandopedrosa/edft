@@ -36,13 +36,6 @@ class ProfileScreenState extends State<ProfileScreen> {
     _nameController.dispose();
   }
 
-  selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    setState(() {
-      _image = im;
-    });
-  }
-
   CircleAvatar getAvatar(AppUser user) {
     if (_image != null) {
       return CircleAvatar(
@@ -98,7 +91,13 @@ class ProfileScreenState extends State<ProfileScreen> {
                     child: getAvatar(user),
                   ),
                   GestureDetector(
-                    onTap: selectImage,
+                    onTap: () async {
+                      Uint8List im = await pickImage(ImageSource.gallery);
+                      setState(() {
+                        _image = im;
+                        user.name = _nameController.text;
+                      });
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(

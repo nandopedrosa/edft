@@ -26,6 +26,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _yearOfBirthController = TextEditingController();
   bool _isLoading = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -69,6 +70,9 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                         .getLocalizedString("profile_disclaimer"),
                     textAlign: TextAlign.center,
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -160,7 +164,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                     items:
                         LocalizationService.instance.getPreferredLanguage() ==
                                 'pt'
-                            ? countriesBr
+                            ? countriesPt
                             : countriesEn,
                   ),
                 ),

@@ -66,6 +66,9 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: DropdownButtonFormField(
