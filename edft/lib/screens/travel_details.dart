@@ -26,12 +26,11 @@ class TravelDetailsScreen extends StatefulWidget {
 }
 
 class TravelDetailsScreenState extends State<TravelDetailsScreen> {
+  final _cityDropdownKey = GlobalKey<DropdownSearchState<City>>();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _travelNameController = TextEditingController();
-  final TextEditingController _numberOfTravelersController =
-      TextEditingController();
-  DateTime? _arrivalDate;
-  DateTime? _departureDate;
+  TextEditingController _travelNameController = TextEditingController();
+  TextEditingController _numberOfTravelersController = TextEditingController();
+  Travel travel = Travel.empty();
 
   @override
   void dispose() {
@@ -53,19 +52,19 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
     }
   }
 
-  List<City> _getCities(Country? country) {
-    if (country == null) {
+  List<City> _getCities(String? countryCode) {
+    if (countryCode == null) {
       return [];
     }
 
     if (LocalizationService.instance.getPreferredLanguage() == 'pt') {
-      return citiesPt.where((c) => c.countryCode == country.code).toList();
+      return citiesPt.where((c) => c.countryCode == countryCode).toList();
     } else {
-      return citiesEn.where((c) => c.countryCode == country.code).toList();
+      return citiesEn.where((c) => c.countryCode == countryCode).toList();
     }
   }
 
-  void _showDatePicker(BuildContext context, String dateType) {
+  void _showDatePicker(BuildContext context, String dateType, Travel travel) {
     DatePicker.showDatePicker(
       context,
       minTime: DateTime.now(),
@@ -76,423 +75,438 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
       onConfirm: (date) {
         setState(() {
           if (dateType == "arrival") {
-            _arrivalDate = date;
+            travel.arrivalDate = date.toIso8601String();
           } else if (dateType == "departure") {
-            _departureDate = date;
+            travel.departureDate = date.toIso8601String();
           }
         });
       },
     );
   }
 
+  //After each State Change we have to update the model values from controller values
+  void updateFromControllers(Travel travel) {
+    travel.name = _travelNameController.text;
+    travel.numberOfTravelers = _numberOfTravelersController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Travel travel = Travel.empty();
     if (widget.travelId != null) {
       travel = Provider.of<TravelProvider>(context).getTravel;
     }
 
-    _travelNameController.text = travel.name ?? "";
-    _numberOfTravelersController.text = travel.numberOfTravelers ?? "";
-    _arrivalDate =
-        travel.arrivalDate != null ? DateTime.parse(travel.arrivalDate!) : null;
-    _departureDate = travel.departureDate != null
-        ? DateTime.parse(travel.departureDate!)
-        : null;
+    _travelNameController = TextEditingController(text: travel.name);
+    _numberOfTravelersController =
+        TextEditingController(text: travel.numberOfTravelers);
 
-    return Scaffold(
-      bottomNavigationBar:
-          const MyBottomNavigationBar(currentPage: homePageIndex),
-      appBar: AppBar(
-        centerTitle: true,
-        titleTextStyle: appBarTitle,
-        title: Text(
-          LocalizationService.instance.getLocalizedString("travel_details"),
+    return WillPopScope(
+      onWillPop: () async {
+        TravelService().refreshTravel(context, widget.travelId);
+        return Future.value(true);
+      },
+      child: Scaffold(
+        bottomNavigationBar:
+            const MyBottomNavigationBar(currentPage: homePageIndex),
+        appBar: AppBar(
+          centerTitle: true,
+          titleTextStyle: appBarTitle,
+          title: Text(
+            LocalizationService.instance.getLocalizedString("travel_details"),
+          ),
         ),
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    LocalizationService.instance
-                        .getLocalizedString("travel_details_disclaimer"),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    inputSize: 32,
-                    controller: _travelNameController,
-                    isPass: false,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_travel_name"),
-                    labelText: LocalizationService.instance
-                        .getLocalizedString("travel_name"),
-                    textInputType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormFieldInput(
-                    inputSize: 2,
-                    controller: _numberOfTravelersController,
-                    isPass: false,
-                    hintText: LocalizationService.instance
-                        .getLocalizedString("enter_number_of_travelers"),
-                    labelText: LocalizationService.instance
-                        .getLocalizedString("number_of_travelers"),
-                    textInputType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.calendar_today,
-                          color: Colors.white70),
-                      onPressed: () {
-                        _showDatePicker(context, "arrival");
-                      },
-                      style: OutlinedButton.styleFrom(
-                        primary: Colors.white70,
-                        side: const BorderSide(color: Colors.white54),
-                      ),
-                      label: _arrivalDate == null
-                          ? Text(LocalizationService.instance
-                              .getLocalizedString("arrival"))
-                          // ignore: prefer_interpolation_to_compose_strings
-                          : Text(LocalizationService.instance
-                                  .getLocalizedString("arrival") +
-                              ": " +
-                              LocalizationService.instance
-                                  .getFullLocalizedDateAndTime(
-                                      _arrivalDate.toString())!),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.calendar_today,
-                          color: Colors.white70),
-                      onPressed: () {
-                        _showDatePicker(context, "departure");
-                      },
-                      style: OutlinedButton.styleFrom(
-                        primary: Colors.white70,
-                        side: const BorderSide(color: Colors.white54),
-                      ),
-                      label: _departureDate == null
-                          ? Text(LocalizationService.instance
-                              .getLocalizedString("departure"))
-                          // ignore: prefer_interpolation_to_compose_strings
-                          : Text(LocalizationService.instance
-                                  .getLocalizedString("departure") +
-                              ": " +
-                              LocalizationService.instance
-                                  .getFullLocalizedDateAndTime(
-                                      _arrivalDate.toString())!),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: DropdownButtonFormField(
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                    value: travel.transportCode,
-                    decoration: getDropdownDecoration(
-                      context,
+        body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
                       LocalizationService.instance
-                          .getLocalizedString("transport"),
+                          .getLocalizedString("travel_details_disclaimer"),
+                      textAlign: TextAlign.center,
                     ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        travel.transportCode = value;
-                      });
-                    },
-                    items: transportPreferenceList,
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: DropdownButtonFormField(
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                    value: travel.accomodationCode,
-                    decoration: getDropdownDecoration(
-                      context,
-                      LocalizationService.instance
-                          .getLocalizedString("accomodation"),
-                    ),
-                    onChanged: (String? value) {
-                      setState(() {
-                        travel.accomodationCode = value;
-                      });
-                    },
-                    items: accomodationPreferenceList,
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: DropdownSearch<Country>(
-                    validator: (Country? value) {
-                      if (value == null) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                    popupProps: PopupProps.menu(
-                      isFilterOnline: false,
-                      showSelectedItems: false,
-                      showSearchBox: true,
-                      searchFieldProps: TextFieldProps(
-                        decoration: InputDecoration(
-                            label: Text(LocalizationService.instance
-                                .getLocalizedString("search_ellipsis"))),
-                      ),
-                    ),
-                    dropdownSearchDecoration: getDropdownDecoration(
-                      context,
-                      LocalizationService.instance
-                          .getLocalizedString("country"),
-                    ),
-                    itemAsString: (Country c) => c.toString(),
-                    showClearButton: true,
-                    onChanged: (Country? data) {
-                      setState(() {
-                        travel.countryCode = data!.code;
-                      });
-                    },
-                    selectedItem: travel.getCountry(),
-                    items:
-                        LocalizationService.instance.getPreferredLanguage() ==
-                                'pt'
-                            ? countriesPt
-                            : countriesEn,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: DropdownSearch<City>(
-                    validator: (City? value) {
-                      if (value == null) {
-                        return LocalizationService.instance
-                            .getLocalizedString("mandatory_field");
-                      }
-                      return null;
-                    },
-                    popupProps: PopupProps.menu(
-                      isFilterOnline: false,
-                      showSelectedItems: false,
-                      showSearchBox: true,
-                      searchFieldProps: TextFieldProps(
-                        decoration: InputDecoration(
-                            label: Text(LocalizationService.instance
-                                .getLocalizedString("search_ellipsis"))),
-                      ),
-                    ),
-                    dropdownSearchDecoration: getDropdownDecoration(
-                      context,
-                      LocalizationService.instance.getLocalizedString("city"),
-                    ),
-                    itemAsString: (City c) => c.toString(),
-                    showClearButton: true,
-                    onChanged: (City? data) {
-                      setState(() {
-                        travel.cityId = data!.id;
-                      });
-                    },
-                    selectedItem: travel.getCity(),
-                    items: _getCities(travel.getCountry()),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ElevatedButton(
-                    child: Text(LocalizationService.instance
-                        .getLocalizedString("confirm")),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //Validate dates (the rest is validated through the Form)
-                        if (_arrivalDate == null || _departureDate == null) {
-                          showSnackBar(
-                              context,
-                              LocalizationService.instance.getLocalizedString(
-                                  "arrival_departure_mandatories"),
-                              "error");
-                          return;
-                        } else {
-                          travel.arrivalDate = _arrivalDate!.toIso8601String();
-                          travel.departureDate =
-                              _departureDate!.toIso8601String();
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        if (!hasFocus) {
+                          updateFromControllers(travel);
                         }
-
-                        travel.name = _travelNameController.text;
-                        travel.numberOfTravelers =
-                            _numberOfTravelersController.text;
-
-                        if (widget.travelId == null ||
-                            widget.travelId!.isEmpty) {
-                          TravelService().updateTravel(travel, context);
-                          showSnackBar(
-                            context,
+                      },
+                      child: TextFormFieldInput(
+                        inputSize: 32,
+                        controller: _travelNameController,
+                        isPass: false,
+                        hintText: LocalizationService.instance
+                            .getLocalizedString("enter_travel_name"),
+                        labelText: LocalizationService.instance
+                            .getLocalizedString("travel_name"),
+                        textInputType: TextInputType.text,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return LocalizationService.instance
+                                .getLocalizedString("mandatory_field");
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        if (!hasFocus) {
+                          updateFromControllers(travel);
+                        }
+                      },
+                      child: TextFormFieldInput(
+                        inputSize: 2,
+                        controller: _numberOfTravelersController,
+                        isPass: false,
+                        hintText: LocalizationService.instance
+                            .getLocalizedString("enter_number_of_travelers"),
+                        labelText: LocalizationService.instance
+                            .getLocalizedString("number_of_travelers"),
+                        textInputType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return LocalizationService.instance
+                                .getLocalizedString("mandatory_field");
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.calendar_today,
+                            color: Colors.white70),
+                        onPressed: () {
+                          _showDatePicker(context, "arrival", travel);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white70,
+                          side: const BorderSide(color: Colors.white54),
+                        ),
+                        label: travel.arrivalDate == null
+                            ? Text(LocalizationService.instance
+                                .getLocalizedString("arrival"))
                             // ignore: prefer_interpolation_to_compose_strings
-                            LocalizationService.instance
-                                    .getLocalizedString("travel_created") +
-                                " " +
-                                LocalizationService.instance.getLocalizedString(
-                                    "dont_forget_to_add_places"),
-                            'success',
-                          );
-                        } else {
-                          //Existing travel
-                          showSnackBar(
-                            context,
-                            LocalizationService.instance
-                                .getLocalizedString("travel_details_updated"),
-                            'success',
-                          );
+                            : Text(LocalizationService.instance
+                                    .getLocalizedString("arrival") +
+                                ": " +
+                                LocalizationService.instance
+                                    .getFullLocalizedDateAndTime(
+                                        travel.arrivalDate)!),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.calendar_today,
+                            color: Colors.white70),
+                        onPressed: () {
+                          _showDatePicker(context, "departure", travel);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white70,
+                          side: const BorderSide(color: Colors.white54),
+                        ),
+                        label: travel.departureDate == null
+                            ? Text(LocalizationService.instance
+                                .getLocalizedString("departure"))
+                            // ignore: prefer_interpolation_to_compose_strings
+                            : Text(LocalizationService.instance
+                                    .getLocalizedString("departure") +
+                                ": " +
+                                LocalizationService.instance
+                                    .getFullLocalizedDateAndTime(
+                                        travel.departureDate)!),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: DropdownButtonFormField(
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
                         }
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                        return null;
+                      },
+                      value: travel.transportCode,
+                      decoration: getDropdownDecoration(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const AttractionsMenuScreen(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          LocalizationService.instance
-                              .getLocalizedString("add_attractions"),
-                          style: Theme.of(context).textTheme.subtitle1!,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(Icons.arrow_forward_ios),
-                      ],
+                        LocalizationService.instance
+                            .getLocalizedString("transport"),
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          travel.transportCode = value;
+                        });
+                      },
+                      items: transportPreferenceList,
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: DropdownButtonFormField(
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                      value: travel.accomodationCode,
+                      decoration: getDropdownDecoration(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const AttractionsMenuScreen(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          LocalizationService.instance
-                              .getLocalizedString("view_added_attractions"),
-                          style: Theme.of(context).textTheme.subtitle1!,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(Icons.arrow_forward_ios),
-                      ],
+                        LocalizationService.instance
+                            .getLocalizedString("accomodation"),
+                      ),
+                      onChanged: (String? value) {
+                        setState(() {
+                          travel.accomodationCode = value;
+                        });
+                      },
+                      items: accomodationPreferenceList,
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: DropdownSearch<Country>(
+                      validator: (Country? value) {
+                        if (value == null) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                      popupProps: PopupProps.menu(
+                        isFilterOnline: false,
+                        showSelectedItems: false,
+                        showSearchBox: true,
+                        searchFieldProps: TextFieldProps(
+                          decoration: InputDecoration(
+                              label: Text(LocalizationService.instance
+                                  .getLocalizedString("search_ellipsis"))),
+                        ),
+                      ),
+                      dropdownSearchDecoration: getDropdownDecoration(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ItineraryScreen(),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          LocalizationService.instance
-                              .getLocalizedString("see_itinerary"),
-                          style: Theme.of(context).textTheme.subtitle1!,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(Icons.arrow_forward_ios),
-                      ],
+                        LocalizationService.instance
+                            .getLocalizedString("country"),
+                      ),
+                      itemAsString: (Country c) => c.toString(),
+                      onChanged: (Country? data) {
+                        setState(() {
+                          travel.countryCode = data!.code;
+                          _cityDropdownKey.currentState?.clear();
+                        });
+                      },
+                      selectedItem: travel.getCountry(),
+                      items:
+                          LocalizationService.instance.getPreferredLanguage() ==
+                                  'pt'
+                              ? countriesPt
+                              : countriesEn,
                     ),
                   ),
-                ),
-                const SizedBox(height: 40),
-              ],
-            ),
-          )),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: DropdownSearch<City>(
+                      key: _cityDropdownKey,
+                      validator: (City? value) {
+                        if (value == null) {
+                          return LocalizationService.instance
+                              .getLocalizedString("mandatory_field");
+                        }
+                        return null;
+                      },
+                      popupProps: PopupProps.menu(
+                        isFilterOnline: false,
+                        showSelectedItems: false,
+                        showSearchBox: true,
+                        searchFieldProps: TextFieldProps(
+                          decoration: InputDecoration(
+                              label: Text(LocalizationService.instance
+                                  .getLocalizedString("search_ellipsis"))),
+                        ),
+                      ),
+                      dropdownSearchDecoration: getDropdownDecoration(
+                        context,
+                        LocalizationService.instance.getLocalizedString("city"),
+                      ),
+                      itemAsString: (City c) => c.toString(),
+                      onChanged: (City? data) {
+                        setState(() {
+                          travel.cityId = data?.id;
+                        });
+                      },
+                      selectedItem: travel.getCity(),
+                      items: _getCities(travel.countryCode),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: ElevatedButton(
+                      child: Text(LocalizationService.instance
+                          .getLocalizedString("confirm")),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          //Validate dates (the rest is validated through the Form)
+                          if (travel.arrivalDate == null ||
+                              travel.departureDate == null) {
+                            showSnackBar(
+                                context,
+                                LocalizationService.instance.getLocalizedString(
+                                    "arrival_departure_mandatories"),
+                                "error");
+                            return;
+                          }
+                          updateFromControllers(travel);
+                          TravelService().updateTravel(travel, context);
+
+                          if (travel.id == null || travel.id!.isEmpty) {
+                            showSnackBar(
+                              context,
+                              // ignore: prefer_interpolation_to_compose_strings
+                              LocalizationService.instance
+                                      .getLocalizedString("travel_created") +
+                                  " " +
+                                  LocalizationService.instance
+                                      .getLocalizedString(
+                                          "dont_forget_to_add_places"),
+                              'success',
+                            );
+                          } else {
+                            //Existing travel
+                            showSnackBar(
+                              context,
+                              LocalizationService.instance
+                                  .getLocalizedString("travel_details_updated"),
+                              'success',
+                            );
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AttractionsMenuScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            LocalizationService.instance
+                                .getLocalizedString("add_attractions"),
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_forward_ios),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AttractionsMenuScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            LocalizationService.instance
+                                .getLocalizedString("view_added_attractions"),
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_forward_ios),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ItineraryScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            LocalizationService.instance
+                                .getLocalizedString("see_itinerary"),
+                            style: Theme.of(context).textTheme.subtitle1!,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.arrow_forward_ios),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

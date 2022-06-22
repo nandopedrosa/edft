@@ -17,6 +17,14 @@ class TravelService {
     return travel;
   }
 
+  //We refresh user after updates and popping screens so we make sure we always have the most up to date information
+  Future<void> refreshTravel(BuildContext context, String? travelId) async {
+    if (travelId != null) {
+      TravelProvider userProvider = Provider.of(context, listen: false);
+      await userProvider.refreshTravel(travelId);
+    }
+  }
+
   Future<void> updateTravel(Travel travel, BuildContext context) async {
     if (travel.id == null) {
       //New travel
@@ -27,7 +35,6 @@ class TravelService {
       //Existing travel
       await _collection.doc(travel.id).set(Travel.toMap(travel));
     }
-    TravelProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshTravel(travel.id!);
+    refreshTravel(context, travel.id!);
   }
 }
