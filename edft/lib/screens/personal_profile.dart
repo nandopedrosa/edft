@@ -24,7 +24,7 @@ class PersonalProfileScreen extends StatefulWidget {
 
 class PersonalProfileScreenState extends State<PersonalProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _yearOfBirthController = TextEditingController();
+  TextEditingController _yearOfBirthController = TextEditingController();
   bool _isLoading = false;
 
   @override
@@ -46,9 +46,7 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
   @override
   Widget build(BuildContext context) {
     AppUser user = Provider.of<UserProvider>(context).getUser;
-    _yearOfBirthController.text =
-        user.yearOfBirth == null ? "" : user.yearOfBirth!;
-
+    _yearOfBirthController = TextEditingController(text: user.yearOfBirth);
     return WillPopScope(
       onWillPop: () async {
         UserService().refreshUser(context);
@@ -86,28 +84,36 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                   ),
                   Container(
                     padding: const EdgeInsets.all(10),
-                    child: TextFormFieldInput(
-                      controller: _yearOfBirthController,
-                      inputSize: 4,
-                      isPass: false,
-                      hintText: LocalizationService.instance
-                          .getLocalizedString("enter_year_of_birth"),
-                      labelText: LocalizationService.instance
-                          .getLocalizedString("year_of_birth"),
-                      textInputType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return null;
+                    child: Focus(
+                      //always update on focus out (make sure we have the most up to date info)
+                      onFocusChange: (hasFocus) {
+                        if (!hasFocus) {
+                          updateFromControllers(user);
                         }
-                        //Validate year of birth. Min: 100 years ago. Max: now.
-                        DateTime now = DateTime.now();
-                        if (int.parse(value) > now.year ||
-                            int.parse(value) < (now.year - 100)) {
-                          return LocalizationService.instance
-                              .getLocalizedString("invalid_year_of_birth");
-                        }
-                        return null;
                       },
+                      child: TextFormFieldInput(
+                        controller: _yearOfBirthController,
+                        inputSize: 4,
+                        isPass: false,
+                        hintText: LocalizationService.instance
+                            .getLocalizedString("enter_year_of_birth"),
+                        labelText: LocalizationService.instance
+                            .getLocalizedString("year_of_birth"),
+                        textInputType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return null;
+                          }
+                          //Validate year of birth. Min: 100 years ago. Max: now.
+                          DateTime now = DateTime.now();
+                          if (int.parse(value) > now.year ||
+                              int.parse(value) < (now.year - 100)) {
+                            return LocalizationService.instance
+                                .getLocalizedString("invalid_year_of_birth");
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ),
                   Container(
@@ -122,7 +128,6 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       onChanged: (String? value) {
                         setState(() {
                           user.gender = value;
-                          updateFromControllers(user);
                         });
                       },
                       items: genderList,
@@ -140,7 +145,6 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       onChanged: (String? value) {
                         setState(() {
                           user.relationShipStatus = value;
-                          updateFromControllers(user);
                         });
                       },
                       items: relationshipStatusList,
@@ -169,7 +173,6 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       onChanged: (Country? data) {
                         setState(() {
                           user.country = data;
-                          updateFromControllers(user);
                         });
                       },
                       compareFn: (c1, c2) =>
