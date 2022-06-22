@@ -62,6 +62,12 @@ class UserService {
     return res;
   }
 
+  //We refresh user after updates and popping screens so we make sure we always have the most up to date information
+  Future<void> refreshUser(BuildContext context) async {
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
+  }
+
   Future<void> _createUser(
       String id, String email, String name, String? avatarUrl) async {
     AppUser user =
@@ -71,8 +77,7 @@ class UserService {
 
   Future<void> updateUser(AppUser user, BuildContext context) async {
     await _collection.doc(user.id).set(AppUser.toMap(user));
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
+    refreshUser(context);
   }
 
   Future<String> loginUser(

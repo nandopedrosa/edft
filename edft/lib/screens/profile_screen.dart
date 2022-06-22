@@ -36,6 +36,11 @@ class ProfileScreenState extends State<ProfileScreen> {
     _nameController.dispose();
   }
 
+  //After each State Change we have to update the model values from controller values
+  void updateFromControllers(AppUser user) {
+    user.name = _nameController.text;
+  }
+
   CircleAvatar getAvatar(AppUser user) {
     if (_image != null) {
       return CircleAvatar(
@@ -95,7 +100,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                       Uint8List im = await pickImage(ImageSource.gallery);
                       setState(() {
                         _image = im;
-                        user.name = _nameController.text;
+                        updateFromControllers(user);
                       });
                     },
                     child: Container(
