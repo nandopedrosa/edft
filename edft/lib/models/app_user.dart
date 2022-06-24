@@ -68,11 +68,11 @@ class AppUser {
     return email;
   }
 
-  List<Attraction> getAttractions() {
-    List<Attraction> res = [];
+  List<AttractionPreference> getAttractions() {
+    List<AttractionPreference> res = [];
     if (preferenceAttractions != null && preferenceAttractions!.isNotEmpty) {
-      for (Attraction a in attractionPreferencesList) {
-        if (preferenceAttractions!.contains(a.code)) {
+      for (AttractionPreference a in attractionPreferencesList) {
+        if (preferenceAttractions!.contains(a.category)) {
           res.add(a);
         }
       }

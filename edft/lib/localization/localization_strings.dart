@@ -208,6 +208,10 @@ class LocalizationStrings {
     'arrival_before_departure': [
       "A data de chegada deve ser anterior à data de saída.",
       "The arrival date must be before the departure date."
-    ]
+    ],
+    "choose_attraction_category": [
+      "Escolha uma categoria de atração",
+      "Choose an attraction category"
+    ],
   };
 }

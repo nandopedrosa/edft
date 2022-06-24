@@ -74,27 +74,28 @@ class City {
   int get hashCode => id.hashCode;
 }
 
-class Attraction {
-  final String code;
+class AttractionPreference {
+  final String category;
   final String name;
   final String image;
 
-  Attraction({
-    required this.code,
+  AttractionPreference({
+    required this.category,
     required this.name,
     required this.image,
   });
 
-  static Map<String, dynamic> toJson(Attraction a) {
+  static Map<String, dynamic> toJson(AttractionPreference a) {
     final Map<String, dynamic> attractionMap = {};
-    attractionMap['code'] = a.code;
+    attractionMap['category'] = a.category;
     attractionMap['name'] = a.name;
     attractionMap['image'] = a.image;
     return attractionMap;
   }
 
-  factory Attraction.fromJson(Map<String, dynamic> json) => Attraction(
-        code: json["code"],
+  factory AttractionPreference.fromJson(Map<String, dynamic> json) =>
+      AttractionPreference(
+        category: json["category"],
         name: json["name"],
         image: json["image"],
       );

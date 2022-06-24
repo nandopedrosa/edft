@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:edft/models/app_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edft/models/travel.dart';
 import 'package:edft/providers/app_user_provider.dart';
 import 'package:edft/screens/travel_details.dart';
-import 'package:edft/utils/colors.dart';
+import 'package:edft/service/travel_service.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -67,34 +68,41 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: <Widget>[
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-              TripEntry(),
-              Divider(
-                color: offWhiteColor,
-              ),
-            ],
+          padding: const EdgeInsets.only(top: 10),
+          child: StreamBuilder(
+            stream: TravelService().getCollection().snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting ||
+                  !snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return ListView.separated(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (ctx, index) {
+                    Travel t = Travel.fromMap(snapshot.data!.docs[index].data()
+                        as Map<String, dynamic>);
+                    return TravelEntry(
+                      travelId: t.id!,
+                      travelName: t.name!,
+                      countryName: t.getCountry()!.name,
+                      cityName: t.getCity()!.name,
+                      arrivalDate: LocalizationService.instance
+                          .getFullLocalizedDateAndTime(t.arrivalDate)!,
+                      departureDate: LocalizationService.instance
+                          .getFullLocalizedDateAndTime(t.departureDate)!,
+                    );
+                  },
+                  separatorBuilder: (ctx, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: const Divider(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              } //fim do else
+            },
           ),
         ),
       ),

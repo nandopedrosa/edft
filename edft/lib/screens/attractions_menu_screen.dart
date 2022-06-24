@@ -34,8 +34,8 @@ class AttractionsMenuScreenState extends State<AttractionsMenuScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               child: Text(
-                "Recife",
-                style: Theme.of(context).textTheme.titleMedium,
+                LocalizationService.instance
+                    .getLocalizedString("choose_attraction_category"),
               ),
             ),
             Center(

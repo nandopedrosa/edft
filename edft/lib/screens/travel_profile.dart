@@ -26,7 +26,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
   bool _isLoading = false;
   final _attractions = attractionPreferencesList
       .map((attraction) =>
-          MultiSelectItem<Attraction>(attraction, attraction.name))
+          MultiSelectItem<AttractionPreference>(attraction, attraction.name))
       .toList();
   final _formKey = GlobalKey<FormState>();
 
@@ -126,7 +126,7 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                   ),
                   Container(
                       padding: const EdgeInsets.all(10),
-                      child: MultiSelectDialogField<Attraction>(
+                      child: MultiSelectDialogField<AttractionPreference>(
                         initialValue: user.getAttractions(),
                         selectedItemsTextStyle:
                             const TextStyle(color: Colors.blue),
@@ -166,11 +166,11 @@ class TravelProfileScreenState extends State<TravelProfileScreen> {
                           ),
                         ),
                         items: _attractions,
-                        onConfirm: (List<Attraction> attractions) {
+                        onConfirm: (List<AttractionPreference> attractions) {
                           setState(() {
                             List<String> selectedAttractions = [];
-                            for (Attraction a in attractions) {
-                              selectedAttractions.add(a.code);
+                            for (AttractionPreference a in attractions) {
+                              selectedAttractions.add(a.category);
                             }
                             user.preferenceAttractions = selectedAttractions;
                           });

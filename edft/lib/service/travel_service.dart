@@ -11,6 +11,10 @@ class TravelService {
   final CollectionReference _collection =
       FirebaseFirestore.instance.collection('travels');
 
+  CollectionReference getCollection() {
+    return _collection;
+  }
+
   Future<Travel> getTravelDetails(String travelId) async {
     DocumentSnapshot snap = await _collection.doc(travelId).get();
     Map<String, dynamic> travelMap = snap.data() as Map<String, dynamic>;

@@ -94,24 +94,24 @@ final List<DropdownMenuItem<String>> budgetPreferenceList = [
 ];
 
 //Attractions
-final List<Attraction> attractionPreferencesList = [
-  Attraction(
-    code: "bar",
+final List<AttractionPreference> attractionPreferencesList = [
+  AttractionPreference(
+    category: "bar",
     name: LocalizationService.instance.getLocalizedString("bar"),
     image: "assets/images/attraction-bar.jpg",
   ),
-  Attraction(
-    code: "restaurant",
+  AttractionPreference(
+    category: "restaurant",
     name: LocalizationService.instance.getLocalizedString("restaurant"),
     image: "assets/images/attraction-restaurant.jpg",
   ),
-  Attraction(
-    code: "museum",
+  AttractionPreference(
+    category: "museum",
     name: LocalizationService.instance.getLocalizedString("museum"),
     image: "assets/images/attraction-museum.jpg",
   ),
-  Attraction(
-    code: "nature",
+  AttractionPreference(
+    category: "nature",
     name: LocalizationService.instance.getLocalizedString("nature"),
     image: "assets/images/attraction-nature.jpg",
   ),

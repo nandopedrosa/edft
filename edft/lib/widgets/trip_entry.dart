@@ -1,10 +1,24 @@
 import 'package:edft/localization/localization_service.dart';
+import 'package:edft/screens/travel_details.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class TripEntry extends StatelessWidget {
-  const TripEntry({
+class TravelEntry extends StatelessWidget {
+  final String travelId;
+  final String travelName;
+  final String countryName;
+  final String cityName;
+  final String arrivalDate;
+  final String departureDate;
+
+  const TravelEntry({
     Key? key,
+    required this.travelId,
+    required this.travelName,
+    required this.countryName,
+    required this.cityName,
+    required this.arrivalDate,
+    required this.departureDate,
   }) : super(key: key);
 
   @override
@@ -12,29 +26,24 @@ class TripEntry extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(
-            top: 5,
+        ListTile(
+          leading: const CircleAvatar(
+            backgroundImage: NetworkImage(
+                "https://www.flytap.com/-/media/Flytap/new-tap-pages/destinations/south-america/brazil/recife/recife-banner-mobile-1024x553.jpg"),
           ),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://www.flytap.com/-/media/Flytap/new-tap-pages/destinations/south-america/brazil/recife/recife-banner-mobile-1024x553.jpg"),
+          title: Text("$cityName, $countryName"),
+          subtitle: Text(
+            travelName,
+            style: const TextStyle(
+              color: secondaryColor,
+              fontSize: 12,
             ),
-            title: Text('Brasil, Recife'),
-            subtitle: Text(
-              'Viagem com a família',
-              style: TextStyle(
-                color: secondaryColor,
-                fontSize: 12,
-              ),
-            ),
-            trailing: Text(
-              '01/01/2022 a 10/01/2022',
-              style: TextStyle(
-                color: secondaryColor,
-                fontSize: 12,
-              ),
+          ),
+          trailing: Text(
+            '$arrivalDate - $departureDate',
+            style: const TextStyle(
+              color: secondaryColor,
+              fontSize: 12,
             ),
           ),
         ),
@@ -65,7 +74,16 @@ class TripEntry extends StatelessWidget {
                 child: Text(
                   LocalizationService.instance.getLocalizedString("details"),
                 ),
-                onPressed: () {/* ... */},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TravelDetailsScreen(
+                        travelId: travelId,
+                      ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(width: 8),
             ],

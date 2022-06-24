@@ -1,0 +1,62 @@
+<html>
+<head>    
+</head>
+<body>
+    <input id="file" type="file">
+
+    <p>Select the google maps json file.</p>
+    <p id="output"></p>
+
+    <script type="text/javascript">
+        (function () {
+
+            function onChange(event) {
+                var reader = new FileReader();
+                reader.onload = onReaderLoad;
+                reader.readAsText(event.target.files[0]);
+            }
+
+            function onReaderLoad(event) {
+                var features = JSON.parse(event.target.result)["features"];
+
+                var res = []; //result with a collection of attractions
+                const cityId = "17"; //Recife
+                const category = "restaurant";
+                const budget = "3";
+                const description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt.";
+
+                for (var i = 0; i < features.length; i++) {
+                    var attr = {
+                        id: "",
+                        name: "",
+                        countryCode: "",
+                        cityId: "",
+                        category: "",
+                        budget: "",
+                        latitude: "",
+                        longitude: "",
+                        address: "",
+                        image: "",
+                        description: "",
+                        url: "",
+                    };
+                    attr.name = features[i].properties.Title;
+                    attr.countryCode = features[i].properties.Location['Country Code'];
+                    attr.latitude = features[i].properties.Location['Geo Coordinates'].Latitude;
+                    attr.longitude = features[i].properties.Location['Geo Coordinates'].Longitude;
+                    attr.address = features[i].properties.Location.Address;
+                    attr.url = features[i].properties["Google Maps URL"];
+                    attr.cityId = cityId;
+                    attr.category = category;
+                    attr.budget = budget;
+                    attr.description = description;
+                    res.push(attr);
+                }
+                document.getElementById('output').textContent = JSON.stringify(res);
+            }
+
+            document.getElementById('file').addEventListener('change', onChange);
+        }());
+    </script>
+</body>
+</html>
