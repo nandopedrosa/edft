@@ -25,6 +25,10 @@ class UserService {
     return user;
   }
 
+  String getCurrentUserId() {
+    return _auth.currentUser!.uid;
+  }
+
   Future<String> signupUser({
     required String name,
     required String email,

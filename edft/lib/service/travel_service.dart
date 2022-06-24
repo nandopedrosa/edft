@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edft/models/travel.dart';
 import 'package:edft/providers/travel_provider.dart';
+import 'package:edft/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,10 @@ class TravelService {
   }
 
   Future<void> updateTravel(Travel travel, BuildContext context) async {
+    if (travel.userId == null || travel.userId!.isEmpty) {
+      travel.userId = UserService().getCurrentUserId();
+    }
+
     if (travel.id == null) {
       //New travel
       DocumentReference doc = _collection.doc(); //First, create the document

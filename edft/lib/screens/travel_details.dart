@@ -44,6 +44,30 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
     getTravelData();
   }
 
+  String validateDates() {
+    String res = "success";
+    if (travel.arrivalDate == null || travel.departureDate == null) {
+      return LocalizationService.instance
+          .getLocalizedString("arrival_departure_mandatories");
+    }
+
+    if (DateTime.parse(travel.arrivalDate!)
+            .compareTo(DateTime.parse(travel.departureDate!)) >
+        0) {
+      return LocalizationService.instance
+          .getLocalizedString("arrival_before_departure");
+    }
+
+    if (DateTime.parse(travel.departureDate!)
+            .compareTo(DateTime.parse(travel.arrivalDate!)) <
+        0) {
+      return LocalizationService.instance
+          .getLocalizedString("departure_after_arrival");
+    }
+
+    return res;
+  }
+
   getTravelData() async {
     //Travel ID can be null if we are creating a new one
     if (widget.travelId != null) {
@@ -53,15 +77,19 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
   }
 
   List<City> _getCities(String? countryCode) {
+    List<City> res = [];
     if (countryCode == null) {
-      return [];
+      return res;
     }
 
     if (LocalizationService.instance.getPreferredLanguage() == 'pt') {
-      return citiesPt.where((c) => c.countryCode == countryCode).toList();
+      res = citiesPt.where((c) => c.countryCode == countryCode).toList();
     } else {
-      return citiesEn.where((c) => c.countryCode == countryCode).toList();
+      res = citiesEn.where((c) => c.countryCode == countryCode).toList();
     }
+
+    res.sort((a, b) => a.name.compareTo(b.name));
+    return res;
   }
 
   void _showDatePicker(BuildContext context, String dateType, Travel travel) {
@@ -93,7 +121,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.travelId != null) {
-      travel = Provider.of<TravelProvider>(context).getTravel;
+      travel = Provider.of<TravelProvider>(context).getTravel ?? Travel.empty();
     }
 
     _travelNameController = TextEditingController(text: travel.name);
@@ -378,19 +406,17 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           //Validate dates (the rest is validated through the Form)
-                          if (travel.arrivalDate == null ||
-                              travel.departureDate == null) {
-                            showSnackBar(
-                                context,
-                                LocalizationService.instance.getLocalizedString(
-                                    "arrival_departure_mandatories"),
-                                "error");
+                          String dateValidationMsg = validateDates();
+                          if (dateValidationMsg != "success") {
+                            showSnackBar(context, dateValidationMsg, "error");
                             return;
                           }
+
                           updateFromControllers(travel);
                           TravelService().updateTravel(travel, context);
 
-                          if (travel.id == null || travel.id!.isEmpty) {
+                          if (widget.travelId == null ||
+                              widget.travelId!.isEmpty) {
                             showSnackBar(
                               context,
                               // ignore: prefer_interpolation_to_compose_strings
@@ -402,6 +428,9 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                                           "dont_forget_to_add_places"),
                               'success',
                             );
+                            setState(() {
+                              widget.travelId = travel.id;
+                            });
                           } else {
                             //Existing travel
                             showSnackBar(
@@ -418,95 +447,88 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AttractionsMenuScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            LocalizationService.instance
-                                .getLocalizedString("add_attractions"),
-                            style: Theme.of(context).textTheme.subtitle1!,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_forward_ios),
-                        ],
-                      ),
-                    ),
+                  TravelAction(
+                    actionText: LocalizationService.instance
+                        .getLocalizedString("add_attractions"),
+                    actionFunction: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AttractionsMenuScreen(),
+                        ),
+                      );
+                    },
+                    travelId: widget.travelId,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  TravelAction(
+                    actionText: LocalizationService.instance
+                        .getLocalizedString("view_added_attractions"),
+                    actionFunction: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AttractionsMenuScreen(),
+                        ),
+                      );
+                    },
+                    travelId: widget.travelId,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AttractionsMenuScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            LocalizationService.instance
-                                .getLocalizedString("view_added_attractions"),
-                            style: Theme.of(context).textTheme.subtitle1!,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_forward_ios),
-                        ],
-                      ),
-                    ),
+                  TravelAction(
+                    actionText: LocalizationService.instance
+                        .getLocalizedString("see_itinerary"),
+                    actionFunction: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ItineraryScreen(),
+                        ),
+                      );
+                    },
+                    travelId: widget.travelId,
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ItineraryScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            LocalizationService.instance
-                                .getLocalizedString("see_itinerary"),
-                            style: Theme.of(context).textTheme.subtitle1!,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(Icons.arrow_forward_ios),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 10),
                 ],
               ),
             )),
       ),
     );
+  }
+}
+
+class TravelAction extends StatelessWidget {
+  String actionText;
+  final VoidCallback actionFunction;
+  String? travelId; //we use this to show or not show de TravelAction
+  TravelAction(
+      {Key? key,
+      required this.actionText,
+      required this.actionFunction,
+      this.travelId})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (travelId != null) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 30),
+        child: GestureDetector(
+          onTap: actionFunction,
+          child: Row(
+            children: [
+              Text(
+                actionText,
+                style: Theme.of(context).textTheme.subtitle1!,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(Icons.arrow_forward_ios),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink(); //empty widget
+    }
   }
 }

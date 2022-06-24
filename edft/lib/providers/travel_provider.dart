@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class TravelProvider extends ChangeNotifier {
   Travel? _travel;
 
-  Travel get getTravel => _travel!;
+  Travel? get getTravel => _travel;
 
   Future<void> refreshTravel(String travelId) async {
     _travel = await TravelService().getTravelDetails(travelId);

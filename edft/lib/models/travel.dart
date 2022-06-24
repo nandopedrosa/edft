@@ -4,6 +4,7 @@ import 'package:edft/utils/models.dart';
 
 class Travel {
   String? id;
+  String? userId;
   String? name;
   String? numberOfTravelers;
   String? arrivalDate; //iso 8601 format
@@ -17,6 +18,7 @@ class Travel {
 
   Travel(
       {required this.id,
+      required this.userId,
       required this.name,
       required this.numberOfTravelers,
       required this.arrivalDate,
@@ -29,6 +31,7 @@ class Travel {
   static Map<String, dynamic> toMap(Travel travel) {
     final Map<String, dynamic> travelMap = {};
     travelMap['id'] = travel.id;
+    travelMap['userId'] = travel.userId;
     travelMap['name'] = travel.name;
     travelMap['numberOfTravelers'] = travel.numberOfTravelers;
     travelMap['arrivalDate'] = travel.arrivalDate;
@@ -40,16 +43,17 @@ class Travel {
     return travelMap;
   }
 
-  factory Travel.fromMap(Map<String, dynamic> json) => Travel(
-        id: json["id"],
-        name: json["name"],
-        numberOfTravelers: json["numberOfTravelers"],
-        arrivalDate: json["arrivalDate"],
-        departureDate: json["departureDate"],
-        transportCode: json["transportCode"],
-        accomodationCode: json["accomodationCode"],
-        countryCode: json["countryCode"],
-        cityId: json["cityId"],
+  factory Travel.fromMap(Map<String, dynamic> travelMap) => Travel(
+        id: travelMap["id"],
+        userId: travelMap["userId"],
+        name: travelMap["name"],
+        numberOfTravelers: travelMap["numberOfTravelers"],
+        arrivalDate: travelMap["arrivalDate"],
+        departureDate: travelMap["departureDate"],
+        transportCode: travelMap["transportCode"],
+        accomodationCode: travelMap["accomodationCode"],
+        countryCode: travelMap["countryCode"],
+        cityId: travelMap["cityId"],
       );
 
   Country? getCountry() {

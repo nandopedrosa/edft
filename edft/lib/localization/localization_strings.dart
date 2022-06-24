@@ -201,5 +201,13 @@ class LocalizationStrings {
       "As datas de chegada e partida são obrigatórias.",
       "Arrival and departure dates are mandatories."
     ],
+    'departure_after_arrival': [
+      "A data de saída deve ser posterior à data de chegada.",
+      "The departure date must be after the arrival date."
+    ],
+    'arrival_before_departure': [
+      "A data de chegada deve ser anterior à data de saída.",
+      "The arrival date must be before the departure date."
+    ]
   };
 }
