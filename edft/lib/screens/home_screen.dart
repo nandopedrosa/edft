@@ -8,7 +8,7 @@ import 'package:edft/service/travel_service.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
-import 'package:edft/widgets/trip_entry.dart';
+import 'package:edft/widgets/travel_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';

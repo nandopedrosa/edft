@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edft/models/attraction.dart';
 import 'package:edft/screens/attraction_detail.dart';
-import 'package:edft/utils/colors.dart';
+import 'package:edft/service/attraction_service.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -30,37 +32,40 @@ class AttractionsScreenState extends State<AttractionsScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                "Recife - Restaurante",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AttractionDetail(
-                        attractionTitle: "Chica Bacana", isAdded: true),
+        child: StreamBuilder(
+          stream: AttractionService().getCollection().snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                !snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ListView.separated(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (ctx, index) {
+                  Map<String, dynamic> attractionMap =
+                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                  attractionMap['id'] = snapshot.data!.docs[index].id;
+                  Attraction attr = Attraction.fromMap(attractionMap);
+                  return AttractionEntry(
+                    name: attr.name,
+                    image: attr.image,
+                    address: attr.address,
+                    category: attr.category,
+                    budget: attr.budget,
+                    isAdded: false,
+                  );
+                },
+                separatorBuilder: (ctx, index) => const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Divider(
+                    color: Colors.white,
                   ),
-                );
-              },
-              child: const AttractionEntry(isAdded: true),
-            ),
-            const Divider(
-              color: offWhiteColor,
-            ),
-            const AttractionEntry(
-              isAdded: false,
-            ),
-            const Divider(
-              color: offWhiteColor,
-            ),
-          ],
+                ),
+              );
+            } //fim do else
+          },
         ),
       ),
     );

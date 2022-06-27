@@ -4,8 +4,15 @@
 <body>
     <input id="file" type="file">
 
-    <p>Select the google maps json file.</p>
+    
+    <p>Select the google maps json file.</p>    
+    <label for="category">Category</label><br>
+    <input type="text" id="category" name="category"><br><br>
+    <label for="cityId">City ID</label><br>
+    <input type="text" id="city" name="city">
+  
     <p id="output"></p>
+    
 
     <script type="text/javascript">
         (function () {
@@ -20,14 +27,18 @@
                 var features = JSON.parse(event.target.result)["features"];
 
                 var res = []; //result with a collection of attractions
-                const cityId = "17"; //Recife
-                const category = "restaurant";
+                const cityId = document.getElementById('city').value; //Recife = 17
+                const category = document.getElementById('category').value;
                 const budget = "3";
                 const description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt.";
+                
+                if(!(category && cityId)) {
+                    document.getElementById('output').textContent = "Category and City are mandatories";
+                    return;
+                } 
 
                 for (var i = 0; i < features.length; i++) {
                     var attr = {
-                        id: "",
                         name: "",
                         countryCode: "",
                         cityId: "",

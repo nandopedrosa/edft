@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import '../localization/localization_service.dart';
 
 class AttractionsMenuScreen extends StatefulWidget {
-  const AttractionsMenuScreen({Key? key}) : super(key: key);
+  final String cityId;
+  const AttractionsMenuScreen({Key? key, required this.cityId})
+      : super(key: key);
 
   @override
   State<AttractionsMenuScreen> createState() => AttractionsMenuScreenState();
@@ -45,8 +47,11 @@ class AttractionsMenuScreenState extends State<AttractionsMenuScreen> {
                 itemCount: attractionPreferencesList.length,
                 itemBuilder: (context, i) {
                   return AttractionMenuCard(
-                      name: attractionPreferencesList[i].name,
-                      image: attractionPreferencesList[i].image);
+                    name: attractionPreferencesList[i].name,
+                    image: attractionPreferencesList[i].image,
+                    category: attractionPreferencesList[i].category,
+                    cityId: widget.cityId,
+                  );
                 },
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -67,11 +72,15 @@ class AttractionsMenuScreenState extends State<AttractionsMenuScreen> {
 class AttractionMenuCard extends StatelessWidget {
   final String name;
   final String image;
+  final String category;
+  final String cityId;
 
   const AttractionMenuCard({
     Key? key,
     required this.name,
     required this.image,
+    required this.category,
+    required this.cityId,
   }) : super(key: key);
 
   @override

@@ -1,13 +1,32 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:edft/localization/localization_service.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class AttractionEntry extends StatelessWidget {
   final bool isAdded;
-  const AttractionEntry({
+  final String image;
+  final String name;
+  final String address;
+  final String budget;
+  final String category;
+  final Map<String, String> budgetDollarMap = {
+    "": "",
+    "1": r" - $",
+    "2": r" - $$",
+    "3": r" - $$$",
+    "4": r" - $$$$",
+    "5": r" - $$$$$",
+  };
+  AttractionEntry({
     Key? key,
+    required this.name,
+    required this.image,
+    required this.address,
+    required this.budget,
+    required this.category,
     required this.isAdded,
   }) : super(key: key);
 
@@ -23,13 +42,13 @@ class AttractionEntry extends StatelessWidget {
               borderRadius: BorderRadius.zero,
               child: SizedBox(
                 child: GFAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://lh5.googleusercontent.com/p/AF1QipP3ZoWA9bfA1k9p5FVU3d0P7KfInQEjjGng1TLv=w408-h306-k-no"),
+                    backgroundImage:
+                        image.isNotEmpty ? NetworkImage(image) : null,
                     shape: GFAvatarShape.standard),
               ),
             ),
             title: Text(
-              'Chica Bacana',
+              name,
               style: TextStyle(color: blueColor),
             ),
             subtitle: Column(
@@ -37,14 +56,15 @@ class AttractionEntry extends StatelessWidget {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 Text(
-                  'Restaurante - Comida Típica',
+                  LocalizationService.instance.getLocalizedString(category) +
+                      budgetDollarMap[budget]!,
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 12,
                   ),
                 ),
                 Text(
-                  '0,4 KM da sua estadia',
+                  address,
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 12,
