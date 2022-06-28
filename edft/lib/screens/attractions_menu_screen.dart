@@ -103,7 +103,10 @@ class AttractionMenuCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AttractionsScreen(),
+                          builder: (context) => AttractionsScreen(
+                            cityId: cityId,
+                            category: category,
+                          ),
                         ),
                       );
                     },

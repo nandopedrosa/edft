@@ -46,4 +46,23 @@ class TravelService {
     }
     refreshTravel(context, travel.id!);
   }
+
+  Future<void> addOrRemoveAttraction(
+      {required String travelId,
+      required String attractionId,
+      required bool isAdded,
+      required BuildContext context}) async {
+    if (!isAdded) {
+      //Add
+      await _collection.doc(travelId).update({
+        'attractions': FieldValue.arrayUnion([attractionId])
+      });
+    } else {
+      //Remove
+      await _collection.doc(travelId).update({
+        'attractions': FieldValue.arrayRemove([attractionId])
+      });
+    }
+    refreshTravel(context, travelId);
+  }
 }

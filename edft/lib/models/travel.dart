@@ -13,6 +13,7 @@ class Travel {
   String? accomodationCode;
   String? countryCode;
   String? cityId;
+  List attractions = []; //List of attraction ID's
 
   Travel.empty();
 
@@ -26,7 +27,8 @@ class Travel {
       required this.transportCode,
       required this.accomodationCode,
       required this.countryCode,
-      required this.cityId});
+      required this.cityId,
+      required this.attractions});
 
   static Map<String, dynamic> toMap(Travel travel) {
     final Map<String, dynamic> travelMap = {};
@@ -40,6 +42,7 @@ class Travel {
     travelMap['accomodationCode'] = travel.accomodationCode;
     travelMap['countryCode'] = travel.countryCode;
     travelMap['cityId'] = travel.cityId;
+    travelMap['attractions'] = travel.attractions;
     return travelMap;
   }
 
@@ -54,6 +57,7 @@ class Travel {
         accomodationCode: travelMap["accomodationCode"],
         countryCode: travelMap["countryCode"],
         cityId: travelMap["cityId"],
+        attractions: travelMap["attractions"],
       );
 
   Country? getCountry() {

@@ -5,6 +5,7 @@ import 'package:edft/models/travel.dart';
 import 'package:edft/providers/app_user_provider.dart';
 import 'package:edft/screens/travel_details.dart';
 import 'package:edft/service/travel_service.dart';
+import 'package:edft/service/user_service.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -70,7 +71,10 @@ class HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: const EdgeInsets.only(top: 10),
           child: StreamBuilder(
-            stream: TravelService().getCollection().snapshots(),
+            stream: TravelService()
+                .getCollection()
+                .where("userId", isEqualTo: UserService().getCurrentUserId())
+                .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
                   !snapshot.hasData) {

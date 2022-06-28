@@ -72,7 +72,12 @@ class AttractionEntry extends StatelessWidget {
                 )
               ],
             ),
-            trailing: isAdded ? Icon(Icons.check) : null,
+            trailing: isAdded
+                ? Icon(
+                    Icons.check,
+                    color: successColor,
+                  )
+                : null,
           ),
         ),
       ],

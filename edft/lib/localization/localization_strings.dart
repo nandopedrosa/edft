@@ -160,7 +160,7 @@ class LocalizationStrings {
     'attraction': ["Atração", "Attraction"],
     'add_to_trip': ["Adicionar à viagem", "Add to trip"],
     'remove_from_trip': ["Remover da viagem", "Remove from trip"],
-    'add': ["Adicionar", "Remover"],
+    'add': ["Adicionar", "Add"],
     'remove': ["Remover", "Remove"],
     'time': ["Horário", "Time"],
     'activity': ["Atividade", "Activity"],
@@ -212,6 +212,16 @@ class LocalizationStrings {
     "choose_attraction_category": [
       "Escolha uma categoria de atração",
       "Choose an attraction category"
+    ],
+    "no_attractions_found": [
+      "Nenhuma atração encontrada.",
+      "No attractions found."
+    ],
+    'attraction_added': ["Atração adicionada!", "Attraction added!"],
+    'attraction_removed': ["Atração removida!", "Attraction removed!"],
+    'click_here_for_more_details': [
+      "Clique aqui para maiores detalhes",
+      "Click here for more details"
     ],
   };
 }

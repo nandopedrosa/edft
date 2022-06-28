@@ -14,6 +14,9 @@ import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+// ignore: depend_on_referenced_packages
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
 
@@ -398,6 +401,36 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                     height: 20,
                   ),
                   Container(
+                    padding: const EdgeInsets.all(10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlacePicker(
+                              apiKey: "AIzaSyCo8rUF3rK321H5hsblO6ZgbTIf5Q4xsms",
+                              initialPosition:
+                                  const LatLng(-33.8567844, 151.213108),
+                              useCurrentLocation: true,
+                              onPlacePicked: (result) {
+                                print(
+                                    "###### O LOCAL FOI ESCOLHIDO ######  NOME: ${result.name}");
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Pick Location",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
                     height: 50,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
@@ -449,22 +482,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                   ),
                   TravelAction(
                     actionText: LocalizationService.instance
-                        .getLocalizedString("add_attractions"),
-                    actionFunction: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AttractionsMenuScreen(
-                            cityId: travel.cityId!,
-                          ),
-                        ),
-                      );
-                    },
-                    travelId: widget.travelId,
-                  ),
-                  TravelAction(
-                    actionText: LocalizationService.instance
-                        .getLocalizedString("view_added_attractions"),
+                        .getLocalizedString("attractions"),
                     actionFunction: () {
                       Navigator.push(
                         context,
