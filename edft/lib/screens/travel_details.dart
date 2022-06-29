@@ -6,6 +6,7 @@ import 'package:edft/providers/travel_provider.dart';
 import 'package:edft/screens/itinerary_screen.dart';
 import 'package:edft/screens/attractions_menu_screen.dart';
 import 'package:edft/service/travel_service.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
@@ -19,6 +20,7 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TravelDetailsScreen extends StatefulWidget {
   String? travelId;
@@ -47,6 +49,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
     getTravelData();
   }
 
+  getTravelData() async {
+    //Travel ID can be null if we are creating a new one
+    if (widget.travelId != null) {
+      TravelProvider travelProvider = Provider.of(context, listen: false);
+      await travelProvider.refreshTravel(widget.travelId!);
+    }
+  }
+
   String validateDates() {
     String res = "success";
     if (travel.arrivalDate == null || travel.departureDate == null) {
@@ -71,11 +81,11 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
     return res;
   }
 
-  getTravelData() async {
-    //Travel ID can be null if we are creating a new one
-    if (widget.travelId != null) {
-      TravelProvider travelProvider = Provider.of(context, listen: false);
-      await travelProvider.refreshTravel(widget.travelId!);
+  String getStayLocationLabel(Travel t) {
+    if (t.stayName == null) {
+      return "";
+    } else {
+      return "${t.stayName}\n${t.stayAddress}";
     }
   }
 
@@ -223,13 +233,13 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         icon: const Icon(Icons.calendar_today,
-                            color: Colors.white70),
+                            color: offWhiteColor),
                         onPressed: () {
                           _showDatePicker(context, "arrival", travel);
                         },
                         style: OutlinedButton.styleFrom(
-                          primary: Colors.white70,
-                          side: const BorderSide(color: Colors.white54),
+                          primary: offWhiteColor,
+                          side: const BorderSide(color: offWhiteColor),
                         ),
                         label: travel.arrivalDate == null
                             ? Text(LocalizationService.instance
@@ -250,13 +260,13 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         icon: const Icon(Icons.calendar_today,
-                            color: Colors.white70),
+                            color: offWhiteColor),
                         onPressed: () {
                           _showDatePicker(context, "departure", travel);
                         },
                         style: OutlinedButton.styleFrom(
-                          primary: Colors.white70,
-                          side: const BorderSide(color: Colors.white54),
+                          primary: offWhiteColor,
+                          side: const BorderSide(color: offWhiteColor),
                         ),
                         label: travel.departureDate == null
                             ? Text(LocalizationService.instance
@@ -397,33 +407,54 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       items: _getCities(travel.countryCode),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      LocalizationService.instance
+                          .getLocalizedString("pick_stay_location"),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(10),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlacePicker(
-                              apiKey: "AIzaSyCo8rUF3rK321H5hsblO6ZgbTIf5Q4xsms",
-                              initialPosition:
-                                  const LatLng(-33.8567844, 151.213108),
-                              useCurrentLocation: true,
-                              onPlacePicked: (result) {
-                                print(
-                                    "###### O LOCAL FOI ESCOLHIDO ######  NOME: ${result.name}");
-                                Navigator.of(context).pop();
-                              },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.location_pin,
+                            color: offWhiteColor),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlacePicker(
+                                apiKey: dotenv.env['GOOGLE_MAPS_API_KEY']!,
+                                initialPosition: travel.stayName != null
+                                    ? LatLng(double.parse(travel.stayLat!),
+                                        double.parse(travel.stayLng!))
+                                    : const LatLng(atlanticOceanLatitude,
+                                        atlanticOceanLongitude),
+                                useCurrentLocation: true,
+                                onPlacePicked: (place) {
+                                  setState(() {
+                                    travel.stayName = place.name;
+                                    travel.stayAddress = place.formattedAddress;
+                                    travel.stayLat =
+                                        place.geometry!.location.lat.toString();
+                                    travel.stayLng =
+                                        place.geometry!.location.lng.toString();
+                                    travel.stayMapsId = place.placeId;
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Pick Location",
-                        style: TextStyle(color: Colors.blue),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          primary: offWhiteColor,
+                          side: const BorderSide(color: offWhiteColor),
+                        ),
+                        label: Text(getStayLocationLabel(travel)),
                       ),
                     ),
                   ),
@@ -432,16 +463,28 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                   ),
                   Container(
                     height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    padding: const EdgeInsets.only(left: 10),
                     child: ElevatedButton(
-                      child: Text(LocalizationService.instance
-                          .getLocalizedString("confirm")),
+                      child: Text(
+                        LocalizationService.instance
+                            .getLocalizedString("confirm"),
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           //Validate dates (the rest is validated through the Form)
                           String dateValidationMsg = validateDates();
                           if (dateValidationMsg != "success") {
                             showSnackBar(context, dateValidationMsg, "error");
+                            return;
+                          }
+
+                          //Validate Stay Location
+                          if (travel.stayName == null) {
+                            showSnackBar(
+                                context,
+                                LocalizationService.instance.getLocalizedString(
+                                    "stay_location_mandatory"),
+                                "error");
                             return;
                           }
 

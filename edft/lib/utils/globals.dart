@@ -18,7 +18,9 @@ const double avatarRadius = 128;
 //Firebase
 const String avatarFolder = "avatars";
 
-//Dropdowns
+//Misc
+const double atlanticOceanLatitude = -10.63145370236738;
+const double atlanticOceanLongitude = -28.86132281415474;
 
 //Gender
 final List<DropdownMenuItem<String>> genderList = [

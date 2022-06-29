@@ -209,7 +209,7 @@ class LocalizationStrings {
       "A data de chegada deve ser anterior à data de saída.",
       "The arrival date must be before the departure date."
     ],
-    "choose_attraction_category": [
+    'choose_attraction_category': [
       "Escolha uma categoria de atração",
       "Choose an attraction category"
     ],
@@ -223,5 +223,14 @@ class LocalizationStrings {
       "Clique aqui para maiores detalhes",
       "Click here for more details"
     ],
+    'pick_stay_location': [
+      "Selecione o seu local de estadia",
+      "Pick your stay location"
+    ],
+    'stay_location_mandatory': [
+      "Por favor selecione o seu local de estadia",
+      "Please pick your stay location"
+    ],
+    '': ["", ""],
   };
 }
