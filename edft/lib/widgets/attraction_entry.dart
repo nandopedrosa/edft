@@ -1,17 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:edft/localization/localization_service.dart';
+import 'package:edft/models/attraction.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class AttractionEntry extends StatelessWidget {
-  final bool isAdded;
-  final String image;
-  final String name;
-  final String address;
-  final String budget;
-  final String category;
+  final Attraction attr;
   final Map<String, String> budgetDollarMap = {
     "": "",
     "1": r" - $",
@@ -22,12 +18,7 @@ class AttractionEntry extends StatelessWidget {
   };
   AttractionEntry({
     Key? key,
-    required this.name,
-    required this.image,
-    required this.address,
-    required this.budget,
-    required this.category,
-    required this.isAdded,
+    required this.attr,
   }) : super(key: key);
 
   @override
@@ -43,12 +34,12 @@ class AttractionEntry extends StatelessWidget {
               child: SizedBox(
                 child: GFAvatar(
                     backgroundImage:
-                        image.isNotEmpty ? NetworkImage(image) : null,
+                        attr.image.isNotEmpty ? NetworkImage(attr.image) : null,
                     shape: GFAvatarShape.standard),
               ),
             ),
             title: Text(
-              name,
+              attr.name,
               style: TextStyle(color: blueColor),
             ),
             subtitle: Column(
@@ -56,15 +47,16 @@ class AttractionEntry extends StatelessWidget {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 Text(
-                  LocalizationService.instance.getLocalizedString(category) +
-                      budgetDollarMap[budget]!,
+                  LocalizationService.instance
+                          .getLocalizedString(attr.category) +
+                      budgetDollarMap[attr.budget]!,
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 12,
                   ),
                 ),
                 Text(
-                  address,
+                  "${attr.distanceToStayLocation} KM ${LocalizationService.instance.getLocalizedString("from_your_stay_location")}",
                   style: TextStyle(
                     color: secondaryColor,
                     fontSize: 12,
@@ -72,7 +64,7 @@ class AttractionEntry extends StatelessWidget {
                 )
               ],
             ),
-            trailing: isAdded
+            trailing: attr.isAdded!
                 ? Icon(
                     Icons.check,
                     color: successColor,

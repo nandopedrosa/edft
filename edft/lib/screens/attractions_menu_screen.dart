@@ -104,7 +104,6 @@ class AttractionMenuCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AttractionsScreen(
-                            cityId: cityId,
                             category: category,
                           ),
                         ),

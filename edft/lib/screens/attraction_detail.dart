@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, must_be_immutable
 
+import 'package:edft/models/attraction.dart';
 import 'package:edft/providers/travel_provider.dart';
 import 'package:edft/service/travel_service.dart';
 import 'package:edft/utils/colors.dart';
@@ -13,18 +14,10 @@ import '../localization/localization_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AttractionDetail extends StatefulWidget {
-  final String id;
-  final String name;
-  final String description;
-  bool isAdded;
-  final String url;
+  final Attraction attr;
   AttractionDetail({
     Key? key,
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.isAdded,
-    required this.url,
+    required this.attr,
   }) : super(key: key);
 
   @override
@@ -55,11 +48,11 @@ class AttractionDetailState extends State<AttractionDetail> {
                           .id;
                   TravelService().addOrRemoveAttraction(
                       travelId: travelId!,
-                      attractionId: widget.id,
-                      isAdded: widget.isAdded,
+                      attractionId: widget.attr.id,
+                      isAdded: widget.attr.isAdded!,
                       context: context);
                   String? msg;
-                  if (widget.isAdded) {
+                  if (widget.attr.isAdded!) {
                     msg = LocalizationService.instance
                         .getLocalizedString("attraction_removed");
                   } else {
@@ -68,10 +61,10 @@ class AttractionDetailState extends State<AttractionDetail> {
                   }
                   showSnackBar(context, msg, "success");
                   setState(() {
-                    widget.isAdded = !widget.isAdded;
+                    widget.attr.isAdded = !widget.attr.isAdded!;
                   });
                 },
-                child: widget.isAdded
+                child: widget.attr.isAdded!
                     ? Text(
                         LocalizationService.instance
                             .getLocalizedString("remove"),
@@ -100,14 +93,14 @@ class AttractionDetailState extends State<AttractionDetail> {
               Container(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  widget.name,
+                  widget.attr.name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  widget.description,
+                  widget.attr.description,
                   style: const TextStyle(color: Colors.white70),
                   textAlign: TextAlign.justify,
                 ),
@@ -115,8 +108,8 @@ class AttractionDetailState extends State<AttractionDetail> {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () async {
-                  if (widget.url.isNotEmpty) {
-                    final Uri uri = Uri.parse(widget.url);
+                  if (widget.attr.url.isNotEmpty) {
+                    final Uri uri = Uri.parse(widget.attr.url);
                     await launchUrl(uri);
                   }
                 },

@@ -11,6 +11,8 @@ class Attraction {
   final String image;
   final String description;
   final String url;
+  bool? isAdded;
+  String? distanceToStayLocation;
 
   Attraction(
       {required this.id,

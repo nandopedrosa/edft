@@ -9,6 +9,7 @@ import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:math' show cos, sqrt, asin;
 
 // for displaying snackbars
 showSnackBar(BuildContext context, String text, String type) {
@@ -87,4 +88,20 @@ Country? getCountryFromCode(String? code) {
     }
   }
   return null;
+}
+
+//Calculate distance between two points based on Latitude and Longitude
+// Returns distance in KM
+double calculateDistance({
+  required double lat1,
+  required double lng1,
+  required double lat2,
+  required double lng2,
+}) {
+  var p = 0.017453292519943295;
+  var c = cos;
+  var a = 0.5 -
+      c((lat2 - lat1) * p) / 2 +
+      c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
+  return 12742 * asin(sqrt(a));
 }

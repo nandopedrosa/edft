@@ -2,6 +2,7 @@ import 'package:edft/utils/globals.dart';
 
 class LocalizationStrings {
   static const localizedStrings = <String, List<String>>{
+    '': ["", ""],
     'lorem_ipsum': [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt.",
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet tempor enim. Praesent pharetra mauris at ex vulputate, quis pellentesque est bibendum. Aliquam posuere erat eu maximus ornare. Phasellus ex erat, rutrum id dolor eget, feugiat molestie ligula. Nunc nec orci eu eros sagittis dictum vel sed odio. Proin pellentesque metus eget iaculis ultrices. Etiam aliquam diam augue, et commodo orci tristique eget. Aenean ullamcorper commodo nibh quis auctor. Donec eget congue lorem. Etiam non lobortis velit. Mauris quis iaculis erat, at blandit ex. Vestibulum ut ligula neque. Vivamus luctus quis ex at vestibulum. Praesent ac diam a felis suscipit tincidunt.\nOrci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In et velit sit amet lacus hendrerit lobortis. Nullam ultricies risus nunc, sit amet blandit ex feugiat nec. Praesent luctus arcu sed est tempor aliquet. Cras suscipit nunc quam, vehicula tristique quam rutrum nec. In hac habitasse platea dictumst. Mauris id lacus semper quam facilisis sollicitudin. Mauris molestie nibh nec ex vehicula molestie. Aliquam ac tempus mi. In in vulputate urna. Suspendisse dictum leo eu consectetur euismod. Praesent interdum purus a semper tincidunt."
@@ -231,6 +232,9 @@ class LocalizationStrings {
       "Por favor selecione o seu local de estadia",
       "Please pick your stay location"
     ],
-    '': ["", ""],
+    'from_your_stay_location': [
+      "do seu local de estadia",
+      "from your stay location"
+    ]
   };
 }
