@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class AttractionDetail extends StatefulWidget {
   final Attraction attr;
-  AttractionDetail({
+  const AttractionDetail({
     Key? key,
     required this.attr,
   }) : super(key: key);

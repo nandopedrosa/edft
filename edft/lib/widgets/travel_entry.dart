@@ -57,12 +57,11 @@ class TravelEntry extends StatelessWidget {
                     foregroundColor:
                         MaterialStateProperty.all<Color>(Colors.white),
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(cardActionButtonColor),
+                        MaterialStateProperty.all<Color>(purpleColor),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
-                            side: const BorderSide(
-                                color: cardActionButtonColor)))),
+                            side: const BorderSide(color: purpleColor)))),
                 onPressed: () {},
                 child: Text(
                   LocalizationService.instance.getLocalizedString("itinerary"),

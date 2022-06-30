@@ -235,6 +235,11 @@ class LocalizationStrings {
     'from_your_stay_location': [
       "do seu local de estadia",
       "from your stay location"
-    ]
+    ],
+    'show_attractions_disclaimer': [
+      "Atrações baseadas em suas preferências.",
+      "Attractions based on your preferences."
+    ],
+    'show_all': ["Mostrar tudo", "Show all"]
   };
 }

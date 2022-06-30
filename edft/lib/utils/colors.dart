@@ -12,5 +12,5 @@ const errorColor = Color.fromRGBO(220, 53, 69, 1);
 const warningColor = Color.fromRGBO(216, 150, 20, 1);
 
 //Widget Colors
-const cardActionButtonColor = Color.fromRGBO(127, 57, 251, 0.9);
+const purpleColor = Color.fromRGBO(127, 57, 251, 0.9);
 const cardLeadingIconColor = Color.fromRGBO(121, 176, 105, 1);

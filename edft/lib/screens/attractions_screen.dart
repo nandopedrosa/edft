@@ -5,6 +5,7 @@ import 'package:edft/models/travel.dart';
 import 'package:edft/providers/travel_provider.dart';
 import 'package:edft/screens/attraction_detail.dart';
 import 'package:edft/service/attraction_service.dart';
+import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
@@ -23,6 +24,8 @@ class AttractionsScreen extends StatefulWidget {
 }
 
 class AttractionsScreenState extends State<AttractionsScreen> {
+  bool showAll = false;
+
   //Order the Stream Documents in a List by custom order
   List<Attraction> _orderAttractionList(
       {required List<QueryDocumentSnapshot> docs,
@@ -43,6 +46,7 @@ class AttractionsScreenState extends State<AttractionsScreen> {
       res.add(attr);
     }
     if (sortType == "distance") {
+      // Default Order
       res.sort((a, b) =>
           a.distanceToStayLocation!.compareTo(b.distanceToStayLocation!));
     }
@@ -64,55 +68,85 @@ class AttractionsScreenState extends State<AttractionsScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: StreamBuilder(
-          stream: AttractionService()
-              .getCollection()
-              .where("cityId", isEqualTo: travel.cityId)
-              .where("category", isEqualTo: widget.category)
-              .snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                !snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.data!.size == 0) {
-              // List of Documents can be empty if the city has no attractions
-              return Center(
-                child: Text(LocalizationService.instance
-                    .getLocalizedString("no_attractions_found")),
-              );
-            } else {
-              //Order the stream
-              List<Attraction> attractionOrderedList = _orderAttractionList(
-                  docs: snapshot.data!.docs,
-                  sortType: "distance",
-                  travel: travel);
-              return ListView.separated(
-                itemCount: attractionOrderedList.length,
-                itemBuilder: (ctx, index) {
-                  Attraction attr = attractionOrderedList[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AttractionDetail(attr: attr),
-                        ),
-                      );
-                    },
-                    child: AttractionEntry(attr: attr),
-                  );
-                },
-                separatorBuilder: (ctx, index) => const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Divider(
-                    color: Colors.white,
-                  ),
+        child: Column(
+          children: [
+            Text(
+              LocalizationService.instance
+                  .getLocalizedString("show_attractions_disclaimer"),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(LocalizationService.instance
+                    .getLocalizedString("show_all")),
+                Switch(
+                  value: showAll,
+                  onChanged: (value) {
+                    setState(() {
+                      showAll = value;
+                    });
+                  },
+                  activeTrackColor: purpleColor.withAlpha(100),
+                  activeColor: purpleColor,
                 ),
-              );
-            } //fim do else
-          },
+              ],
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: AttractionService()
+                    .getCollection()
+                    .where("cityId", isEqualTo: travel.cityId)
+                    .where("category", isEqualTo: widget.category)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting ||
+                      !snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.data!.size == 0) {
+                    // List of Documents can be empty if the city has no attractions
+                    return Center(
+                      child: Text(LocalizationService.instance
+                          .getLocalizedString("no_attractions_found")),
+                    );
+                  } else {
+                    //Order the stream
+                    List<Attraction> attractionOrderedList =
+                        _orderAttractionList(
+                            docs: snapshot.data!.docs,
+                            sortType: "distance",
+                            travel: travel);
+                    return ListView.separated(
+                      itemCount: attractionOrderedList.length,
+                      itemBuilder: (ctx, index) {
+                        Attraction attr = attractionOrderedList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AttractionDetail(attr: attr),
+                              ),
+                            );
+                          },
+                          child: AttractionEntry(attr: attr),
+                        );
+                      },
+                      separatorBuilder: (ctx, index) => const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  } //fim do else
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
