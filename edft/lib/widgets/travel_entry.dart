@@ -1,24 +1,16 @@
 import 'package:edft/localization/localization_service.dart';
+import 'package:edft/models/travel.dart';
+import 'package:edft/screens/itinerary_screen.dart';
 import 'package:edft/screens/travel_details.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class TravelEntry extends StatelessWidget {
-  final String travelId;
-  final String travelName;
-  final String countryName;
-  final String cityName;
-  final String arrivalDate;
-  final String departureDate;
+  final Travel travel;
 
   const TravelEntry({
     Key? key,
-    required this.travelId,
-    required this.travelName,
-    required this.countryName,
-    required this.cityName,
-    required this.arrivalDate,
-    required this.departureDate,
+    required this.travel,
   }) : super(key: key);
 
   @override
@@ -31,16 +23,17 @@ class TravelEntry extends StatelessWidget {
             backgroundImage: NetworkImage(
                 "https://www.flytap.com/-/media/Flytap/new-tap-pages/destinations/south-america/brazil/recife/recife-banner-mobile-1024x553.jpg"),
           ),
-          title: Text("$cityName, $countryName"),
+          title:
+              Text("${travel.getCity()!.name}, ${travel.getCountry()!.name}"),
           subtitle: Text(
-            travelName,
+            travel.name!,
             style: const TextStyle(
               color: secondaryColor,
               fontSize: 12,
             ),
           ),
           trailing: Text(
-            '$arrivalDate - $departureDate',
+            '${LocalizationService.instance.getFullLocalizedDateAndTime(travel.arrivalDate)} - ${LocalizationService.instance.getFullLocalizedDateAndTime(travel.departureDate)}',
             style: const TextStyle(
               color: secondaryColor,
               fontSize: 12,
@@ -62,7 +55,16 @@ class TravelEntry extends StatelessWidget {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                             side: const BorderSide(color: purpleColor)))),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItineraryScreen(
+                        travel: travel,
+                      ),
+                    ),
+                  );
+                },
                 child: Text(
                   LocalizationService.instance.getLocalizedString("itinerary"),
                   style: const TextStyle(color: offWhiteColor),
@@ -78,7 +80,7 @@ class TravelEntry extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => TravelDetailsScreen(
-                        travelId: travelId,
+                        travelId: travel.id,
                       ),
                     ),
                   );

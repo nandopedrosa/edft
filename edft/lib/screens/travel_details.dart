@@ -545,7 +545,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ItineraryScreen(),
+                          builder: (context) => ItineraryScreen(travel: travel),
                         ),
                       );
                     },

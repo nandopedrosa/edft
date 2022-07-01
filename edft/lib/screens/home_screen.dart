@@ -87,16 +87,7 @@ class HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (ctx, index) {
                     Travel t = Travel.fromMap(snapshot.data!.docs[index].data()
                         as Map<String, dynamic>);
-                    return TravelEntry(
-                      travelId: t.id!,
-                      travelName: t.name!,
-                      countryName: t.getCountry()!.name,
-                      cityName: t.getCity()!.name,
-                      arrivalDate: LocalizationService.instance
-                          .getFullLocalizedDateAndTime(t.arrivalDate)!,
-                      departureDate: LocalizationService.instance
-                          .getFullLocalizedDateAndTime(t.departureDate)!,
-                    );
+                    return TravelEntry(travel: t);
                   },
                   separatorBuilder: (ctx, index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
