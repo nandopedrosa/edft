@@ -95,6 +95,9 @@ final List<DropdownMenuItem<String>> budgetPreferenceList = [
   ),
 ];
 
+const int economicBudgetThreshold = 2;
+const int executiveBudgetThreshold = 5;
+
 //Attractions
 final List<AttractionPreference> attractionPreferencesList = [
   AttractionPreference(

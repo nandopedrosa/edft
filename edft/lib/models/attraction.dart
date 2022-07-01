@@ -59,4 +59,13 @@ class Attraction {
         description: map['description'],
         url: map['url'],
       );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Attraction && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

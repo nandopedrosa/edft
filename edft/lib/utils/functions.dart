@@ -105,3 +105,22 @@ double calculateDistance({
       c(lat1 * p) * c(lat2 * p) * (1 - c((lng2 - lng1) * p)) / 2;
   return 12742 * asin(sqrt(a));
 }
+
+//Returns the budget threshold value
+int getBudgetThreshold(String? budgetPreference) {
+  int res = 99; //any attraction
+
+  if (budgetPreference == null || budgetPreference.isEmpty) {
+    return res;
+  }
+
+  if (budgetPreference == "economic") {
+    res = economicBudgetThreshold;
+  } else if (budgetPreference == "executive") {
+    res = executiveBudgetThreshold;
+  } else {
+    res = -1;
+  }
+
+  return res;
+}

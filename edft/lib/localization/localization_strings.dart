@@ -240,6 +240,6 @@ class LocalizationStrings {
       "Atrações baseadas em suas preferências.",
       "Attractions based on your preferences."
     ],
-    'show_all': ["Mostrar tudo", "Show all"]
+    'show_all': ["Mostrar tudo?", "Show all?"]
   };
 }
