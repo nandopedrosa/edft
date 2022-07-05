@@ -1,4 +1,6 @@
 import 'package:edft/localization/localization_service.dart';
+import 'package:edft/models/attraction.dart';
+import 'package:edft/service/attraction_service.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/models.dart';
 
@@ -104,6 +106,15 @@ class Travel {
       }
     }
     return null;
+  }
+
+  Future<List<Attraction>> getAttractions() async {
+    List<Attraction> res = [];
+    for (String id in attractions) {
+      Attraction a = await AttractionService().getAttractionDetails(id);
+      res.add(a);
+    }
+    return res;
   }
 
   @override

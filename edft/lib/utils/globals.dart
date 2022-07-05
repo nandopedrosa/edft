@@ -95,8 +95,14 @@ final List<DropdownMenuItem<String>> budgetPreferenceList = [
   ),
 ];
 
+//Thresholds
 const int economicBudgetThreshold = 2;
 const int executiveBudgetThreshold = 5;
+
+//Attraction Day Configs (time in minutes)
+int defaultStartTime = 480;
+int defaultSlack = 30;
+int defaultMaxDuration = 720;
 
 //Attractions
 final List<AttractionPreference> attractionPreferencesList = [
@@ -121,6 +127,9 @@ final List<AttractionPreference> attractionPreferencesList = [
     image: "assets/images/attraction-nature.jpg",
   ),
 ];
+
+//Attraction Periods
+List<String> attractionPeriods = ["morning", "mid", "afternoon", "night"];
 
 //Countries BR
 List<Country> countriesPt = [

@@ -11,6 +11,7 @@ class Attraction {
   final String image;
   final String description;
   final String url;
+  final String period;
   bool? isAdded;
   String? distanceToStayLocation;
 
@@ -26,7 +27,8 @@ class Attraction {
       required this.address,
       required this.image,
       required this.description,
-      required this.url});
+      required this.url,
+      required this.period});
 
   static Map<String, dynamic> toMap(Attraction a) {
     final Map<String, dynamic> attractionMap = {};
@@ -42,6 +44,7 @@ class Attraction {
     attractionMap['image'] = a.image;
     attractionMap['description'] = a.description;
     attractionMap['url'] = a.url;
+    attractionMap['period'] = a.period;
     return attractionMap;
   }
 
@@ -58,6 +61,7 @@ class Attraction {
         image: map['image'],
         description: map['description'],
         url: map['url'],
+        period: map['period'],
       );
 
   @override

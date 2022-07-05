@@ -12,6 +12,7 @@ class AttractionService {
   Future<Attraction> getAttractionDetails(String attractionId) async {
     DocumentSnapshot snap = await _collection.doc(attractionId).get();
     Map<String, dynamic> attractionMap = snap.data() as Map<String, dynamic>;
+    attractionMap["id"] = snap.id;
     Attraction attraction = Attraction.fromMap(attractionMap);
     return attraction;
   }
