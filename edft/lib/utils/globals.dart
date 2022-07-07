@@ -70,6 +70,10 @@ final List<DropdownMenuItem<String>> accomodationPreferenceList = [
 //Transports
 final List<DropdownMenuItem<String>> transportPreferenceList = [
   DropdownMenuItem(
+    value: "foot",
+    child: Text(LocalizationService.instance.getLocalizedString("on_foot")),
+  ),
+  DropdownMenuItem(
     value: "car",
     child: Text(LocalizationService.instance.getLocalizedString("car")),
   ),
@@ -82,6 +86,8 @@ final List<DropdownMenuItem<String>> transportPreferenceList = [
     child: Text(LocalizationService.instance.getLocalizedString("train")),
   ),
 ];
+
+const double maxFootDistance = 5.0;
 
 //Budgets
 final List<DropdownMenuItem<String>> budgetPreferenceList = [

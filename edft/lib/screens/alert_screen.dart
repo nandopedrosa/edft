@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+import 'package:edft/service/alert_service.dart';
 import 'package:edft/utils/colors.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
@@ -29,14 +30,19 @@ class AlertScreenState extends State<AlertScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: const <Widget>[
-            AlertEntry(),
-            Divider(
-              color: offWhiteColor,
-            ),
-            AlertEntry(),
-          ],
+        child: ListView.builder(
+          itemCount: AlertService.alerts.length,
+          itemBuilder: (BuildContext ctx, int index) {
+            List<Widget> children = [];
+            Map<String, String> alertMap = AlertService.alerts[index];
+
+            String problem = alertMap["problem"]!;
+            String solution = alertMap["solution"]!;
+            children.add(AlertEntry(problem: problem, solution: solution));
+            children.add(const Divider(color: offWhiteColor));
+
+            return Column(children: children);
+          },
         ),
       ),
     );

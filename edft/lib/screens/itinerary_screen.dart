@@ -3,7 +3,9 @@ import 'package:edft/models/attraction.dart';
 import 'package:edft/models/day.dart';
 import 'package:edft/models/travel.dart';
 import 'package:edft/screens/alert_screen.dart';
+import 'package:edft/service/alert_service.dart';
 import 'package:edft/utils/colors.dart';
+import 'package:edft/utils/functions.dart';
 import 'package:edft/utils/globals.dart';
 import 'package:edft/utils/styles.dart';
 import 'package:edft/widgets/bottom_navigation.dart';
@@ -40,14 +42,26 @@ class ItineraryScreenState extends State<ItineraryScreen> {
       Day d = Day(dayNumber: dayNumber++);
       for (String period in attractionPeriods) {
         // Get the next attraction by period (morning, mid, afternoon, night)
-        Attraction a =
-            attractions.firstWhere((attr) => attr.period.contains(period));
-        // Add the attraction to Day
-        d.attractions.add(a);
-        // Remove from the attractions list (avoid duplicates)
-        attractions.removeWhere((attr) => attr.id == a.id);
-        // Increment total
-        totalAdded++;
+        // If we don't find any for the period, try the next iteration
+        try {
+          Attraction a =
+              attractions.firstWhere((attr) => attr.period.contains(period));
+          a.distanceToStayLocation = calculateDistance(
+                  lat1: double.parse(a.latitude),
+                  lng1: double.parse(a.longitude),
+                  lat2: double.parse(travel.stayLat!),
+                  lng2: double.parse(travel.stayLng!))
+              .toStringAsFixed(1);
+          // Add the attraction to Day
+          d.attractions.add(a);
+          d.periods.add(period);
+          // Remove from the attractions list (avoid duplicates)
+          attractions.removeWhere((attr) => attr.id == a.id);
+          // Increment total
+          totalAdded++;
+        } on StateError {
+          continue;
+        }
       }
       res.add(d);
     }
@@ -70,42 +84,6 @@ class ItineraryScreenState extends State<ItineraryScreen> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AlertScreen(),
-                  ),
-                );
-              },
-              child: const ListTile(
-                title: Text('Alertas'),
-                subtitle: Text(
-                  'Encontramos alguns alertas para sua viagem. Clique aqui para vê-los.',
-                  style: TextStyle(
-                    color: secondaryColor,
-                    fontSize: 12,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.warning,
-                  color: warningColor,
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-              child: Divider(
-                color: offWhiteColor,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
             Expanded(
               child: FutureBuilder<List<Day>>(
                 future: days,
@@ -118,17 +96,41 @@ class ItineraryScreenState extends State<ItineraryScreen> {
                             .getLocalizedString("no_attractions_added_yet")),
                       );
                     } else {
+                      bool hasAlerts = false;
+                      AlertService.updateAlerts(
+                          travel: widget.travel,
+                          numberOfItineraryDays: snapshot.data!.length);
+                      if (AlertService.alerts.isNotEmpty) {
+                        hasAlerts = true;
+                      }
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           Day d = snapshot.data![index];
                           List<Widget> children = [];
-                          children.add(Text(
-                            "${LocalizationService.instance.getLocalizedString("day")} ${d.dayNumber}",
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ));
-                          for (Attraction a in d.attractions) {
-                            children.add(DayAttractionEntry(attr: a));
+
+                          //Alert Tile - only the first time
+                          if (index == 0 && hasAlerts) {
+                            children.add(const AlertMessageTile());
+                            children.add(const SizedBox(
+                              height: 20,
+                            ));
+                          }
+
+                          //Day Number
+                          children.add(
+                            Text(
+                              "${LocalizationService.instance.getLocalizedString("day")} ${d.dayNumber}",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                          );
+
+                          //Attraction Entries
+                          for (var i = 0; i < d.attractions.length; i++) {
+                            children.add(DayAttractionEntry(
+                              attr: d.attractions[i],
+                              period: d.periods[i],
+                            ));
                           }
                           return Column(
                             children: children,
@@ -153,13 +155,49 @@ class ItineraryScreenState extends State<ItineraryScreen> {
   }
 }
 
+class AlertMessageTile extends StatelessWidget {
+  const AlertMessageTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AlertScreen(),
+          ),
+        );
+      },
+      child: ListTile(
+        leading: const Icon(
+          Icons.warning,
+          color: warningColor,
+        ),
+        title: Text(LocalizationService.instance.getLocalizedString("alerts")),
+        subtitle: Text(
+          LocalizationService.instance.getLocalizedString("alerts_found"),
+          style: const TextStyle(
+            color: secondaryColor,
+            fontSize: 12,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class DayAttractionEntry extends StatelessWidget {
+  final String period;
+  final Attraction attr;
+
   const DayAttractionEntry({
     Key? key,
     required this.attr,
+    required this.period,
   }) : super(key: key);
-
-  final Attraction attr;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +228,10 @@ class DayAttractionEntry extends StatelessWidget {
           )
         ],
       ),
-      trailing: const Text("manhã"),
+      trailing: Text(
+        LocalizationService.instance.getLocalizedString(period),
+        style: const TextStyle(color: secondaryColor, fontSize: 12),
+      ),
     );
   }
 }

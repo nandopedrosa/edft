@@ -246,5 +246,38 @@ class LocalizationStrings {
       "No attractions added yet."
     ],
     'day': ["Dia", "Day"],
+    'morning': ["Manhã", "Morning"],
+    'mid': ["Almoço", "Lunch"],
+    'afternoon': ["Tarde", "Afternoon"],
+    'night': ["Noite", "Night"],
+    'on_foot': ["A pé", "On foot"],
+    'alerts_found': [
+      "Encontramos alguns alertas para sua viagem. Clique aqui para vê-los.",
+      "We found some alerts for your travel. Click here to see them."
+    ],
+    'not_enough_days_problem': [
+      "A sua viagem é muita curta para o número de atrações do seu roteiro",
+      "Your travel is too short for the number of attractions in your itinerary"
+    ],
+    'not_enough_days_solution': [
+      "Adicione mais dias à sua viage.",
+      "Add more days to your travel"
+    ],
+    'attraction_too_far_problem': [
+      'Atração "#NAME#" muito longe',
+      'Attraction "#NAME#" too far'
+    ],
+    'attraction_too_far_solution': [
+      "Mude o seu modo de transporte ou selecione uma atração mais próxima",
+      "Change your transport option or choose a closer attraction"
+    ],
+    'attraction_budget_problem': [
+      'Atração "#NAME#" muito cara',
+      'Attraction "#NAME#" too expensive'
+    ],
+    'attraction_budget_solution': [
+      "Escolha atração mais barata ou mude sua preferência de orçamento",
+      "Choose a cheaper attraction or change your budget preference"
+    ]
   };
 }

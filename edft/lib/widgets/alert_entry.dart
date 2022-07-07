@@ -3,23 +3,25 @@ import 'package:edft/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class AlertEntry extends StatelessWidget {
+  final String problem;
+  final String solution;
   const AlertEntry({
     Key? key,
+    required this.problem,
+    required this.solution,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: const <Widget>[
+      children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: 5),
           child: ListTile(
-            title: Text(
-              'Muitas atividades',
-            ),
+            title: Text(problem),
             subtitle: Text(
-              'Tente remover algumas atividades do seu roteiro.',
+              solution,
               style: TextStyle(
                 color: secondaryColor,
                 fontSize: 12,
