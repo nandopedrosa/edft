@@ -1,2 +1,11 @@
 # Esse dia foi trip
-Esse dia foi Trip - App de roteiros de viagens
+Personal travel itinerary assistant and planner.
+
+Built with Flutter and Firebase.
+
+Key features:
+  - Authentication
+  - User profile management
+  - Forms and CRUD screens
+  - Google maps integration
+  - Itinerary management and smart generation
