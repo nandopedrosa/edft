@@ -12,4 +12,4 @@ Key features:
   
 Screen captures:
 
-![login](https://github.com/nandopedrosa/edft/blob/main/screen%20captures/1.jpg?raw=true)
+![login](https://github.com/nandopedrosa/edft/blob/main/screen%20captures/1.jpeg?raw=true)
