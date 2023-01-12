@@ -163,13 +163,15 @@ class PersonalProfileScreenState extends State<PersonalProfileScreen> {
                                   .getLocalizedString("search_ellipsis"))),
                         ),
                       ),
-                      dropdownSearchDecoration: getDropdownDecoration(
-                        context,
-                        LocalizationService.instance
-                            .getLocalizedString("country"),
-                      ),
                       itemAsString: (Country c) => c.toString(),
-                      showClearButton: true,
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: getDropdownDecoration(
+                          context,
+                          LocalizationService.instance
+                              .getLocalizedString("country"),
+                        ),
+                      ),
+                      clearButtonProps: const ClearButtonProps(isVisible: true),
                       onChanged: (Country? data) {
                         setState(() {
                           user.country = data;

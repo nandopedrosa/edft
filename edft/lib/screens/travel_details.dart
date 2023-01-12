@@ -15,9 +15,9 @@ import 'package:edft/widgets/bottom_navigation.dart';
 import 'package:edft/widgets/text_form_field_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
 import '../localization/localization_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -238,7 +238,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                           _showDatePicker(context, "arrival", travel);
                         },
                         style: OutlinedButton.styleFrom(
-                          primary: offWhiteColor,
+                          foregroundColor: offWhiteColor,
                           side: const BorderSide(color: offWhiteColor),
                         ),
                         label: travel.arrivalDate == null
@@ -265,7 +265,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                           _showDatePicker(context, "departure", travel);
                         },
                         style: OutlinedButton.styleFrom(
-                          primary: offWhiteColor,
+                          foregroundColor: offWhiteColor,
                           side: const BorderSide(color: offWhiteColor),
                         ),
                         label: travel.departureDate == null
@@ -352,11 +352,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                                   .getLocalizedString("search_ellipsis"))),
                         ),
                       ),
-                      dropdownSearchDecoration: getDropdownDecoration(
-                        context,
-                        LocalizationService.instance
-                            .getLocalizedString("country"),
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: getDropdownDecoration(
+                          context,
+                          LocalizationService.instance
+                              .getLocalizedString("country"),
+                        ),
                       ),
+                      clearButtonProps: const ClearButtonProps(isVisible: true),
                       itemAsString: (Country c) => c.toString(),
                       onChanged: (Country? data) {
                         setState(() {
@@ -393,10 +396,14 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                                   .getLocalizedString("search_ellipsis"))),
                         ),
                       ),
-                      dropdownSearchDecoration: getDropdownDecoration(
-                        context,
-                        LocalizationService.instance.getLocalizedString("city"),
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: getDropdownDecoration(
+                          context,
+                          LocalizationService.instance
+                              .getLocalizedString("city"),
+                        ),
                       ),
+                      clearButtonProps: const ClearButtonProps(isVisible: true),
                       itemAsString: (City c) => c.toString(),
                       onChanged: (City? data) {
                         setState(() {
@@ -451,7 +458,7 @@ class TravelDetailsScreenState extends State<TravelDetailsScreen> {
                           );
                         },
                         style: OutlinedButton.styleFrom(
-                          primary: offWhiteColor,
+                          foregroundColor: offWhiteColor,
                           side: const BorderSide(color: offWhiteColor),
                         ),
                         label: Text(getStayLocationLabel(travel)),

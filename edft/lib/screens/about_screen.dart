@@ -89,7 +89,8 @@ class AboutScreenState extends State<AboutScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.logout),
-                    style: ElevatedButton.styleFrom(primary: secondaryColor),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: secondaryColor),
                     label: Text(LocalizationService.instance
                         .getLocalizedString("sign_out")),
                     onPressed: () {
