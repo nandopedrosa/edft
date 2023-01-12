@@ -9,3 +9,7 @@ Key features:
   - Forms and CRUD screens
   - Google maps integration
   - Itinerary management and smart generation
+  
+Screen captures:
+
+(https://github.com/nandopedrosa/edft/blob/main/screen%20captures/1.jpg?raw=true)
